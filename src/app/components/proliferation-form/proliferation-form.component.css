@@ -1,0 +1,51 @@
+.example-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.example-container > * {
+    width: 50%;
+    margin: auto;
+}
+.centered-container {
+    display: flex;
+    padding: 2% 10% 1% 12%;
+}
+.space{
+    width: 20%; 
+}
+.example-button-row button,
+.example-button-row a {
+  margin-right: 8px;
+}
+
+.error-date  {
+    border-left: 5px solid #a94442; 
+  }
+.half-size{
+    width: 30%;
+    margin: 20px 10px 0 0;
+}
+
+.width-30{
+    width: 30%;
+}
+
+.margin-bottom-2{
+    margin-bottom: 2rem;
+}
+.input-group {
+
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 100%;
+
+}
+.space-between{
+    justify-content: space-between;
+}
+.background{
+    background-color: #e2e2e2;
+}

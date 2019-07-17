@@ -1,0 +1,8 @@
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="navbar-nav">
+        <a class="nav-item nav-link" routerLink="/">Home</a>
+        <a *ngIf="!isLoggedIn()" routerLink="/login" class="nav-item nav-link" routerLink="/login">Login</a>
+        <a *ngIf="isLoggedIn()" routerLink="/logout" class="nav-item nav-link" routerLink="/logout">Logout</a>
+        <a *ngIf="isLoggedIn()" class="nav-item nav-link" routerLink="/proliferation">Proliferation experiment</a>
+    </div>
+  </nav>
