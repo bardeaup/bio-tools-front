@@ -2,10 +2,10 @@ import { Condition } from './condition';
 
 export class CellularCountProject {
     projectName: string;
-    conditions: Condition[];
+    conditionList: Condition[];
     
     constructor(projectName: string, conditions: Condition[]) {
         this.projectName = projectName;
-        this.conditions = conditions;
+        this.conditionList = conditions;
     }
 }

@@ -81,6 +81,8 @@ export class ProliferationFormComponent implements OnInit {
       // Traitement de la liste de comptes cellulaires pour chaque condition
       let countList: CellCount[] = [];
       cond.counts.forEach(c => {
+
+        console.log("count :", c);
         // Préparation des dates
         let initialDate = moment([c.initialDate.year, c.initialDate.month - 1, c.initialDate.day,
         c.initialTime.hour, c.initialTime.minute]).utcOffset(+2, true).toDate();
@@ -91,6 +93,7 @@ export class ProliferationFormComponent implements OnInit {
         this.invalidEndingDate = finalDate <= initialDate;
         if (!this.invalidEndingDate) {
           let count: CellCount = new CellCount(c.initialQuantity, initialDate, c.finalQuantity, finalDate);
+          console.log("count 2 : ", count)
           countList.push(count);
         }
 
@@ -102,7 +105,8 @@ export class ProliferationFormComponent implements OnInit {
       conditionList.push(condition);
     });
     let project: CellularCountProject = new CellularCountProject(formValue.projectName, conditionList);
-    console.log("modele mappé avent envoi au service : ", project);
+
+    console.log("modele mappé avant envoi au service : ", project);
     // Envoi des données au BACK -> enregistrement en BDD et calcul des PD et DT.
     this.experimentService.cellCountExperimentTreatment(project).subscribe(
       res => console.log("Résultat calcul PD et DT : ", res)
