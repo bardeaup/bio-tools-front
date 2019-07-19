@@ -41,7 +41,7 @@ export class ProliferationFormComponent implements OnInit {
   createConditions(): FormGroup {
     return this.formBuilder.group({
       cellLine: '',
-      initialPopulationDoubling: ['', [Validators.min(0), Validators.max(100000000000000000)]],
+      initialPopulationDoubling: [0, [Validators.min(0), Validators.max(100000000000000000), Validators.required]],
       treatments: this.formBuilder.array([this.createTreatments()]),
       counts: this.formBuilder.array([this.createCounts()])
     });
@@ -77,7 +77,7 @@ export class ProliferationFormComponent implements OnInit {
     // let project : CellularCountProject = new CellularCountProject();
     let conditionList: Condition[] = [];
     formValue.conditions.forEach(cond => {
-
+      
       // Traitement de la liste de comptes cellulaires pour chaque condition
       let countList: CellCount[] = [];
       cond.counts.forEach(c => {
@@ -99,9 +99,9 @@ export class ProliferationFormComponent implements OnInit {
 
       });
       // TODO : mapping de la liste de traitements utilisés pour chaque condition
-
-
-      let condition: Condition = new Condition(cond.cellLine, countList);
+    
+      
+      let condition: Condition = new Condition(cond.cellLine, countList, null, cond.initialPopulationDoubling);
       conditionList.push(condition);
     });
     let project: CellularCountProject = new CellularCountProject(formValue.projectName, conditionList);
