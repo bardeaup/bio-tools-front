@@ -130,5 +130,11 @@ export class ProliferationFormComponent implements OnInit {
     control.push(this.createConditions());
   }
 
+  loadExistingExperiment() {
+    this.experimentService.loadUserExperiment().subscribe(
+      res => console.log("Expériences du gonz : ", res)
+    );
+  }
+
 
 }

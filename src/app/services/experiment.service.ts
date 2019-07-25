@@ -8,11 +8,15 @@ import { CellularCountProject } from '../models/cellular-count-project';
 })
 export class ExperimentService {
 
-  private userUrl = 'http://localhost:8080/api/proliferation-experiment';
+  private experimentUrl = 'http://localhost:8080/api/proliferation-experiment';
 
   constructor(private http: HttpClient) { }
 
   cellCountExperimentTreatment(e: CellularCountProject): Observable<CellularCountProject> {
-    return this.http.post<CellularCountProject>(this.userUrl, e);
+    return this.http.post<CellularCountProject>(this.experimentUrl, e);
+  }
+
+  loadUserExperiment(): Observable<CellularCountProject[]> {
+    return this.http.get<CellularCountProject[]>(this.experimentUrl);
   }
 }
