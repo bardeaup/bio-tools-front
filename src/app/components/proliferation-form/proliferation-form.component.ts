@@ -132,7 +132,15 @@ export class ProliferationFormComponent implements OnInit {
 
   loadExistingExperiment() {
     this.experimentService.loadUserExperiment().subscribe(
-      res => console.log("Expériences du gonz : ", res)
+      res => {
+        console.log("loadExistingExperiment",res);
+        if(res === null){
+          console.log("Nada !")
+        } else{
+          console.log("Expériences du gonz : ", res)
+        }
+      
+      }
     );
   }
 
