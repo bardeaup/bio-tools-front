@@ -14,7 +14,7 @@
           <a class="dropdown-item" href="#">Project B</a>
         </div>
       </div>
-     
+
     </div>
 
     <form [formGroup]="projectForm">
@@ -23,114 +23,146 @@
         <h2>New project</h2>
         <div class="form-group">
           <label>Project name</label>
-          <input type="text" formControlName="projectName" class="form-control w-50" placeholder="Project name" required/>
+          <input type="text" formControlName="projectName" class="form-control w-50" placeholder="Project name"
+            required />
         </div>
         <button type="button" class="btn btn-primary" (click)="displayNewCondition(true)">Add new conditon</button>
       </div>
     </form>
-
   </div>
 
   <!-- New Condition Bloc -->
   <div *ngIf="displayForm" class="width-30 p-3 ">
     <form [formGroup]="projectForm" (ngSubmit)="onSubmitForm()">
 
-      <!-- Boucle sur la liste de Conditions -->
-      <div class="form-group " formArrayName="conditions"
-        *ngFor="let condition of projectForm.get('conditions').controls; let i=index">
-        <div class="form-group" [formGroupName]="i">
+      <!-- Conditions -->
+      <div class="form-group" formGroupName="condition">
+        <h3>Cell line</h3>
+        <div class="form-group card background">
+          <div class="card-body row">
 
-          <h3>Cell line</h3>
-          <div class="form-group card background">
-            <div class="card-body row">
-              
-              <div class="col">
-                <input type="text" class="form-control" formControlName="cellLine" placeholder="Cell line*">
-              </div>
-              <div class="col">
-                <input type="text" class="form-control" formControlName="initialPopulationDoubling"
-                  placeholder="Initial population doubling">
-                  
-              </div>
+            <div class="col">
+              <input type="text" class="form-control" formControlName="cellLine" placeholder="Cell line*">
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" formControlName="initialPopulationDoubling"
+                placeholder="Initial population doubling">
+
             </div>
           </div>
-
-          <!-- Boucle sur la liste de Traitements pour chaque condition -->
+        </div>
+        <hr class="mb-4">
+        <!-- Traitements -->
+        <div class="d-flex justify-content-between">
           <h3>Treatment</h3>
-          <div class="form-group card background" formArrayName="treatments"
-            *ngFor="let treatment of projectForm.get('conditions').controls; let t=index">
-            <div [formGroupName]="t" class="card-body">
-              <input type="text" class="form-control" formControlName="name" placeholder="Treatment">
-              <label>Concentration</label>
-              <div class="row">
-                <div class="col">
-                  <input type="text" class="form-control" formControlName="concentrationValue" placeholder="Value">
+          <!-- Bouton d'ajout de traitements -->
+          <button type="button" class="btn btn-success btn-sm mb-auto" (click)="addTreatment()">
+            New&nbsp;<i class="fa fa-plus-circle"></i>
+          </button>
+        </div>
+       <!--  Bloc de saisie des traitements  -->
+       
+        <ngb-tabset *ngIf="projectForm.get('condition').get('treatments').controls.length > 0">
+          <ngb-tab formArrayName="treatments"
+            *ngFor="let treatment of projectForm.get('condition').get('treatments').controls; let t=index">
+
+            <!-- Onglets permettant de naviger entre les différents traitements -->
+            <ng-template ngbTabTitle>{{t+1}}
+              <span>
+                <a class="disable-link" (click)="deleteTreatment($event, t)">
+                  <i class="fa fa-times-circle"></i>
+                </a>
+              </span>
+            </ng-template>
+
+            <!--  Bloc de saisie de chaque traitement  -->
+            <ng-template ngbTabContent>
+              <div class="card card-body background mt-3" [formGroupName]="t">
+                <label><i class="fas fa-flask"></i> Treatment {{t+1}}</label>
+                <div class="form-group">
+                  <input type="text" class="form-control" formControlName="name" placeholder="Treatment name">
                 </div>
-                <div class="col">
-                  <input type="text" class="form-control" formControlName="concentrationUnit" placeholder="Unit">
+                <div class="row">
+                  <div class="col">
+                    <label>Concentration</label>
+                    <input type="text" class="form-control" formControlName="concentrationValue" placeholder="Value">
+                  </div>
+
+                  <div class="col">
+                    <label>Unit</label>
+                    <select class="custom-select" formControlName="concentrationUnit">unit
+                      <option *ngFor="let concentrationUnit of concentrationUnitRef" [value]="concentrationUnit.unitId">
+                        {{concentrationUnit.unitLabel}}
+                      </option>
+                    </select>
+                  </div>
                 </div>
+              </div>
+            </ng-template>
+
+          </ngb-tab>
+        </ngb-tabset>
+
+        <hr class="mb-4">
+
+        <!-- Boucle sur la liste de Comptes cellulaires -->
+        <h3>Cell count</h3>
+        <div class="form-group card background" formArrayName="counts"
+          *ngFor="let count of projectForm.get('condition').get('counts').controls; let j=index">
+
+          <div [formGroupName]="j" class="card-body">
+            <div class="form-group">
+              <label>Initial cell count</label>
+              <input type="text" class="form-control" formControlName="initialQuantity" placeholder="Cell count">
+            </div>
+            <div class="form-group">
+              <div class="input-group space-between">
+                <div class="input-group w-50">
+
+                  <input class="form-control" formControlName="initialDate" toolbarplacement="bottom"
+                    placeholder="yyyy-mm-dd" name="dp1" ngbDatepicker #d1="ngbDatepicker">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary far fa-calendar-alt" (click)="d1.toggle()"
+                      type="button"></button>
+                  </div>
+
+                </div>
+                <ngb-timepicker formControlName="initialTime"></ngb-timepicker>
+
+
               </div>
             </div>
-          </div>
-
-          <!-- Boucle sur la liste de Comptes cellulaires -->
-          <h3>Cell count</h3>
-          <div class="form-group card background" formArrayName="counts"
-            *ngFor="let count of projectForm.get('conditions').controls; let j=index">
-
-            <div [formGroupName]="j" class="card-body">
-              <div class="form-group">
-                <label>Initial cell count</label>
-                <input type="text" class="form-control" formControlName="initialQuantity" placeholder="Cell count">
-              </div>
-              <div class="form-group">
-                <div class="input-group space-between">
-                  <div class="input-group w-50">
-
-                    <input class="form-control" formControlName="initialDate" toolbarplacement="bottom"
-                      placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker">
-                    <div class="input-group-append">
-                      <button class="btn btn-outline-secondary far fa-calendar-alt" (click)="d.toggle()"
-                        type="button"></button>
-                    </div>
-
-                  </div>
-                  <ngb-timepicker formControlName="initialTime"></ngb-timepicker>
-
-
-                </div>
-              </div>
-              <hr class="mb-4">
-              <div class="form-group">
-                <label>Final cell count</label>
-                <input type="text" class="form-control" formControlName="finalQuantity" placeholder="Cell count">
-              </div>
-              <div class="form-group">
-                <div class="input-group space-between">
-                  <div class="input-group w-50">
-
-                    <input class="form-control" formControlName="finalDate" toolbarplacement="bottom"
-                      placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker">
-                    <div class="input-group-append">
-                      <button class="btn btn-outline-secondary far fa-calendar-alt" (click)="d.toggle()"
-                        type="button"></button>
-                    </div>
-
-                  </div>
-                  <ngb-timepicker formControlName="finalTime"></ngb-timepicker>
-
-
-                </div>
-              </div>
-
+            <hr class="mb-4">
+            <div class="form-group">
+              <label>Final cell count</label>
+              <input type="text" class="form-control" formControlName="finalQuantity" placeholder="Cell count">
             </div>
+            <div class="form-group">
+              <div class="input-group space-between">
+                <div class="input-group w-50">
+
+                  <input class="form-control" formControlName="finalDate" toolbarplacement="bottom"
+                    placeholder="yyyy-mm-dd" name="dp2" ngbDatepicker #d2="ngbDatepicker">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary far fa-calendar-alt" (click)="d2.toggle()"
+                      type="button"></button>
+                  </div>
+
+                </div>
+                <ngb-timepicker formControlName="finalTime"></ngb-timepicker>
+
+
+              </div>
+            </div>
+
           </div>
           <!-- Fin bloc Comptes cellulaires -->
         </div>
         <!-- Fin bloc Condition -->
       </div>
-      <!-- Fin bloc Liste Conditions -->
-      <button type="submit" class="btn btn-info">Submit</button>
+
+      <button type="submit" class="btn btn-info" [disabled]="!projectForm.valid">Submit</button>
+      <!-- [disabled]="!registerForm.valid" -->
     </form>
   </div>
   <!-- <div class="margin-20">

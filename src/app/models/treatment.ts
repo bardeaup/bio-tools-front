@@ -1,11 +1,11 @@
 export class Treatment {
     name: string;
     concentrationValue: number;
-    concentrationUnit: string;
+    concentrationUnitId: string;
 
-    constructor(name: string, concentrationValue: number, concentrationUnit: string){
+    constructor(name: string, concentrationValue: number, concentrationUnitId: string){
         this.name = name;
         this.concentrationValue = concentrationValue;
-        this.concentrationUnit = concentrationUnit;
+        this.concentrationUnitId = concentrationUnitId;
     }
 }

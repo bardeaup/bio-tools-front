@@ -11,7 +11,7 @@ import { LogoutComponent } from './components/logout/logout.component';
 import { HeaderComponent } from './components/header/header.component';
 import { ProliferationFormComponent } from './components/proliferation-form/proliferation-form.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbTabsetModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthInterceptor } from './auth/auth-interceptor.service';
 
 @NgModule({
@@ -30,8 +30,9 @@ import { AuthInterceptor } from './auth/auth-interceptor.service';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-   
-    NgbModule
+    // Ng-Bootstrap
+    NgbModule,
+    NgbTabsetModule
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
   bootstrap: [AppComponent]

@@ -1,19 +1,19 @@
 
 export class CellCount {
     initialQuantity: number;
-    beginDay: Date;
+    beginDate: Date;
     finalQuantity: number;
-    endDay: Date;
+    endDate: Date;
 
     populationDoubling?: number;
     doublingTime?: number;
     finalPopulationDoubling?: number;
 
-    constructor(iq: number, beginDay: Date, fq: number, endDay: Date, pd?: number, dt?: number, finalpd?: number){
+    constructor(iq: number, beginDate: Date, fq: number, endDate: Date, pd?: number, dt?: number, finalpd?: number){
         this.initialQuantity = iq;
-        this.beginDay = beginDay;
+        this.beginDate = beginDate;
         this.finalQuantity = fq;
-        this.endDay = endDay;
+        this.endDate = endDate;
         this.populationDoubling = pd;
         this.doublingTime = dt;
         this.finalPopulationDoubling = finalpd;
