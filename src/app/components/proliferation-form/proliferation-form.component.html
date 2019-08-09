@@ -1,9 +1,9 @@
 <div class="d-flex">
+  <!-- Bloc Gauche -->
   <div class="width-30 p-3">
     <div class="btn-group margin-bottom-2" role="group" aria-label="Button group with nested dropdown">
       <button type="radio" class="btn btn-secondary" (click)="display(true)">Create new project</button>
-
-
+      <!-- Selection projet existant -->
       <div class="btn-group" role="group">
         <button id="btnExperimentSelector" type="radio" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false" (click)="display(false); loadExistingExperiment()">
@@ -14,22 +14,28 @@
           <a class="dropdown-item" href="#">Project B</a>
         </div>
       </div>
-
     </div>
 
     <form [formGroup]="projectForm">
       <!-- New Project Bloc -->
+      
       <div *ngIf="displayForm">
         <h2>New project</h2>
-        <div class="form-group">
-          <label>Project name</label>
-          <input type="text" formControlName="projectName" class="form-control w-50" placeholder="Project name"
-            required />
+
+        <div class="input-group mb-3 w-80">
+          <!--  <label>Project name</label> -->
+          <input type="text" formControlName="projectName" class="form-control" placeholder="Project name" required
+            aria-describedby="basic-addon2">
+          <!-- <div class="input-group-append">
+              <button type="button" class="btn btn-outline-secondary" (click)="displayNewCondition(true)">Start project</button>
+          </div> -->
         </div>
-        <button type="button" class="btn btn-primary" (click)="displayNewCondition(true)">Add new conditon</button>
       </div>
     </form>
+    <!-- Summary table -->
+    <app-project-summary *ngIf="newConditionSaved" [experimentName]="experimentName"></app-project-summary>
   </div>
+  <!-- Fin Bloc Gauche -->
 
   <!-- New Condition Bloc -->
   <div *ngIf="displayForm" class="width-30 p-3 ">
@@ -60,8 +66,8 @@
             New&nbsp;<i class="fa fa-plus-circle"></i>
           </button>
         </div>
-       <!--  Bloc de saisie des traitements  -->
-       
+        <!--  Bloc de saisie des traitements  -->
+
         <ngb-tabset *ngIf="projectForm.get('condition').get('treatments').controls.length > 0">
           <ngb-tab formArrayName="treatments"
             *ngFor="let treatment of projectForm.get('condition').get('treatments').controls; let t=index">
@@ -90,7 +96,7 @@
 
                   <div class="col">
                     <label>Unit</label>
-                    <select class="custom-select" formControlName="concentrationUnit">unit
+                    <select class="custom-select" formControlName="concentrationUnit">
                       <option *ngFor="let concentrationUnit of concentrationUnitRef" [value]="concentrationUnit.unitId">
                         {{concentrationUnit.unitLabel}}
                       </option>
@@ -165,10 +171,4 @@
       <!-- [disabled]="!registerForm.valid" -->
     </form>
   </div>
-  <!-- <div class="margin-20">
-      <a (click)="addCondition()" style="cursor: default">
-        Add another condition +
-      </a>
-    </div> -->
-
 </div>

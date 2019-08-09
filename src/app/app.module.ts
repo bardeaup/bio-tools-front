@@ -13,6 +13,7 @@ import { ProliferationFormComponent } from './components/proliferation-form/prol
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgbModule, NgbTabsetModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthInterceptor } from './auth/auth-interceptor.service';
+import { ProjectSummaryComponent } from './components/project-summary/project-summary.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { AuthInterceptor } from './auth/auth-interceptor.service';
     LoginComponent,
     LogoutComponent,
     HeaderComponent,
-    ProliferationFormComponent,  
+    ProliferationFormComponent,
+    ProjectSummaryComponent,  
   ],
   imports: [
     BrowserModule,

@@ -23,6 +23,8 @@ export class ProliferationFormComponent implements OnInit {
   newConditionDisplayed: boolean = false;
   concentrationUnitRef: ConcentrationUnit[];
   treatmentCounter: number = 0;
+  newConditionSaved: boolean = false;
+  experimentName: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -129,7 +131,11 @@ export class ProliferationFormComponent implements OnInit {
       console.log("modele mappé avant envoi au service : ", project);
       // Envoi des données au BACK -> enregistrement en BDD et calcul des PD et DT.
       this.experimentService.cellCountExperimentTreatment(project).subscribe(
-        res => console.log("Résultat calcul PD et DT : ", res)
+        res => {
+          console.log("Résultat calcul PD et DT : ", res);
+          this.newConditionSaved = true;
+          this.experimentName = formValue.projectName;
+        }
       );
     }
 
@@ -158,20 +164,4 @@ export class ProliferationFormComponent implements OnInit {
       this.treatmentArray.removeAt(id);
 
     }
-
-    loadExistingExperiment() {
-      this.experimentService.loadUserExperiment().subscribe(
-        res => {
-          console.log("loadExistingExperiment", res);
-          if (res === null) {
-            console.log("Nada !")
-          } else {
-            console.log("Expériences du gonz : ", res)
-          }
-
-        }
-      );
-    }
-
-
   }

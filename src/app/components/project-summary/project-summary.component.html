@@ -1,0 +1,40 @@
+<div class="table-responsive-sm">
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Cell line</th>
+                <th scope="col">Treatment</th>
+                <th scope="col">Add new condition</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <!-- *ngFor="let country of countries; index as i" -->
+                <th scope="row">1</th><!-- {{ i + 1 }} -->
+                <td>
+                    cell
+                </td>
+                <td>
+            <tr></tr><!-- *ngFor="condition.treatements" -->
+            </td>
+            <td>
+                <button type="button" class="btn btn-primary btn-sm" (click)="addTreatment()">
+                    New&nbsp;<i class="fa fa-plus-circle"></i>
+                </button>
+            </td>
+            </tr>
+            <tr>
+                <!-- *ngFor="let country of countries; index as i" -->
+                <th scope="row">1</th><!-- {{ i + 1 }} -->
+                <td>
+                    cell
+                </td>
+                <td>
+                    4
+                </td>
+                <td><button>New</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
