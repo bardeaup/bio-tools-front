@@ -48,18 +48,19 @@ export class RegisterComponent implements OnInit {
       this.passwordError = false;
       // TODO register
 
- 
+
       this.signupInfo = new SignUpInfo(
         form.name,
         form.username,
         form.email,
         form.password);
-   
+
       this.authService.signUp(this.signupInfo).subscribe(
         data => {
           console.log("sign up OK : ",data);
           this.isSignedUp = true;
           this.isSignUpFailed = false;
+          this.router.navigate(['proliferation']);
         },
         error => {
           console.log("sign up ERROR : ",error);
