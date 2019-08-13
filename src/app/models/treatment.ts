@@ -2,7 +2,7 @@ export class Treatment {
     name: string;
     concentrationValue: number;
     concentrationUnitId: string;
-    unitLabel: string;
+    concentrationUnitLabel: string;
 
     constructor(name: string, concentrationValue: number, concentrationUnitId: string){
         this.name = name;

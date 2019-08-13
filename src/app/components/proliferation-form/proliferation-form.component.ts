@@ -24,7 +24,7 @@ export class ProliferationFormComponent implements OnInit {
   concentrationUnitRef: ConcentrationUnit[];
   treatmentCounter: number = 0;
   newConditionSaved: boolean = false;
-  experimentName: string;
+  experimentSaved: CellularCountProject;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -35,7 +35,8 @@ export class ProliferationFormComponent implements OnInit {
   ngOnInit() {
     this.initForm();
     this.concentrationUnitService.loadConcentrationUnitReferential().subscribe(
-      data => this.concentrationUnitRef = data
+      data => {this.concentrationUnitRef = data;
+      console.log("units :", this.concentrationUnitRef)}
     )
 
   }
@@ -54,21 +55,18 @@ export class ProliferationFormComponent implements OnInit {
         cellLine: [null, Validators.required],
         initialPopulationDoubling: [0, [Validators.min(0), Validators.max(900000000000000000), Validators.required]],
         treatments: new FormArray([]),
-        counts: this.formBuilder.array([this.createCountGroup()])
+        count: this.formBuilder.group({
+          initialQuantity: [10000, [Validators.min(0), Validators.max(900000000000000000), Validators.required]],
+          initialDate: [{ year: 2019, month: 6, day: 21 }, Validators.required],
+          initialTime: [{ hour: 12, minute: 12 }, Validators.required],
+          finalQuantity: [50000, Validators.required],
+          finalDate: [{ year: 2019, month: 6, day: 23 }, Validators.required],
+          finalTime: [{ hour: 12, minute: 12 }, Validators.required]
+        })
       }),
     });
   }
-
-  createConditionGroup(): FormGroup {
-    return this.formBuilder.group({
-      cellLine: [null, Validators.required],
-      initialPopulationDoubling: [0, [Validators.min(0), Validators.max(900000000000000000), Validators.required]],
-      treatments: this.formBuilder.array([this.createTreatmentGroup()]),
-      counts: this.formBuilder.array([this.createCountGroup()])
-    });
-  }
-
-  createCountGroup(): FormGroup {
+ /*  createCountGroup(): FormGroup {
     return this.formBuilder.group({
       initialQuantity: [10000, [Validators.min(0), Validators.max(900000000000000000), Validators.required]],
       initialDate: [{ year: 2019, month: 6, day: 21 }, Validators.required],
@@ -77,7 +75,7 @@ export class ProliferationFormComponent implements OnInit {
       finalDate: [{ year: 2019, month: 6, day: 23 }, Validators.required],
       finalTime: [{ hour: 12, minute: 12 }, Validators.required]
     });
-  }
+  } */
   createTreatmentGroup(): FormGroup {
     return this.formBuilder.group({
       name: [null, Validators.required],
@@ -97,8 +95,8 @@ export class ProliferationFormComponent implements OnInit {
 
     // Traitement de la liste de comptes cellulaires pour chaque condition
     let countList: CellCount[] = [];
-    formValue.condition.counts.forEach(c => {
-
+    let c = formValue.condition.count;
+  
       // Préparation des dates
       let initialDate = moment([c.initialDate.year, c.initialDate.month - 1, c.initialDate.day,
       c.initialTime.hour, c.initialTime.minute]).utcOffset(+2, true).toDate();
@@ -112,7 +110,6 @@ export class ProliferationFormComponent implements OnInit {
         let count: CellCount = new CellCount(c.initialQuantity, initialDate, c.finalQuantity, finalDate);
         countList.push(count);
       }
-    });
     // Mapping de la liste de traitements utilisés
     let treatmentList: Treatment[] = null;
     if (formValue.condition.treatments !== null) {
@@ -134,9 +131,21 @@ export class ProliferationFormComponent implements OnInit {
         res => {
           console.log("Résultat calcul PD et DT : ", res);
           this.newConditionSaved = true;
-          this.experimentName = formValue.projectName;
+          this.loadExistingExperiment(formValue.projectName);
         }
       );
+    }
+    /**
+     *  Récupération des différentes conditions du projet sauvegardées en Base de donnée
+     * @param projectName
+     */
+    loadExistingExperiment(projectName: string) {
+      this.experimentService.loadUserExperimentByName(projectName).subscribe(
+        data => {
+          this.experimentSaved = data;
+          console.log("this.experimentSaved : ", this.experimentSaved)
+        }
+      ); 
     }
 
     get treatmentArray() {
@@ -153,15 +162,27 @@ export class ProliferationFormComponent implements OnInit {
       console.log("newConditionDisplayed : ", this.newConditionDisplayed)
     }
 
+
+    //----------------- Ajout et suppression de traitements ------------------------------------
+
     addTreatment() {
       this.treatmentArray.push(this.createTreatmentGroup());
     }
-
 
     deleteTreatment(event, id: number) {
       // blocage de la redirection déclanchée par la balise <a>
       event.preventDefault();
       this.treatmentArray.removeAt(id);
+    }
+    // ------------------------------------------------------------------------------------------
 
+    addNewCount(event){
+      if(event === 'addNewCount'){
+        this.projectForm.get('condition').get('count').reset();
+      }
+    }
+
+    newCondition(){
+      this.projectForm.get('condition').reset();
     }
   }

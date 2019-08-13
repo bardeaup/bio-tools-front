@@ -49,3 +49,13 @@
 .background{
     background-color: #e2e2e2;
 }
+
+.w-40{
+    width: 40%;
+}
+.w-60{
+    width: 60%;
+}
+.vertical-separation-line{
+    border-right:1px solid rgba(0, 0, 0, 0.1);
+}
