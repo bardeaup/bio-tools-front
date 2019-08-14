@@ -1,0 +1,80 @@
+<div class="d-flex">
+    <!-- Vertical navbar -->
+    <div class="vertical-nav bg-white  p-3" id="sidebar">
+        <div class="py-4 px-3 mb-4 bg-light">
+            <div class="media d-flex align-items-center"><img
+                    src="https://res.cloudinary.com/mhmd/image/upload/v1556074849/avatar-1_tcnd60.png" alt="..."
+                    width="65" class="mr-3 rounded-circle img-thumbnail shadow-sm">
+                <div class="media-body">
+                    <h4 class="m-0">Jason Doe</h4>
+                    <p class="font-weight-light text-muted mb-0">Web developer</p>
+                </div>
+            </div>
+        </div>
+
+        <p class="text-gray font-weight-bold text-uppercase px-3 medium mb-0">Menu</p>
+
+        <ul class="nav flex-column bg-white mb-0">
+            <li class="nav-item">
+                <div class="input-group my-3">
+                    <input type="text" class="form-control" placeholder="Experiment name" aria-label="Experiment name"
+                        aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-success" type="button">Find</button>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-dark font-italic">
+                    <i class="fa fa-table mr-3 text-primary fa-fw"></i>
+                    Experiment history
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a type="button" class="nav-link text-dark font-italic " (click)="displaySetup()">
+                    <i class="fa fa-plus-square mr-3 text-primary fa-fw"></i>
+                    Create new
+                </a>
+            </li>
+
+           
+        </ul>
+
+        <p class="text-gray font-weight-bold text-uppercase px-3 small py-4 mb-0">Charts</p>
+
+        <ul class="nav flex-column bg-white mb-0">
+            <li class="nav-item">
+                <a href="#" class="nav-link text-dark font-italic">
+                    <i class="fa fa-area-chart mr-3 text-primary fa-fw"></i>
+                    Area charts
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-dark font-italic">
+                    <i class="fa fa-bar-chart mr-3 text-primary fa-fw"></i>
+                    Bar charts
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-dark font-italic">
+                    <i class="fa fa-pie-chart mr-3 text-primary fa-fw"></i>
+                    Pie charts
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-dark font-italic">
+                    <i class="fa fa-line-chart mr-3 text-primary fa-fw"></i>
+                    Line charts
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- End vertical navbar -->
+
+
+    <!-- Page content holder -->
+    <div class="w-100 p-3">
+        <app-experiment-setup *ngIf=setupDisplayed></app-experiment-setup>
+    </div>
+</div>

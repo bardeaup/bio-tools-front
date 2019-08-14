@@ -14,6 +14,10 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgbModule, NgbTabsetModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthInterceptor } from './auth/auth-interceptor.service';
 import { ProjectSummaryComponent } from './components/project-summary/project-summary.component';
+import { ProliferationExperimentComponent } from './components/proliferation-experiment/proliferation-experiment.component';
+import { MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatButtonModule } from  '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ExperimentSetupComponent } from './components/experiment-setup/experiment-setup.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +28,9 @@ import { ProjectSummaryComponent } from './components/project-summary/project-su
     LogoutComponent,
     HeaderComponent,
     ProliferationFormComponent,
-    ProjectSummaryComponent,  
+    ProjectSummaryComponent,
+    ProliferationExperimentComponent,
+    ExperimentSetupComponent,  
   ],
   imports: [
     BrowserModule,
@@ -34,7 +40,8 @@ import { ProjectSummaryComponent } from './components/project-summary/project-su
     HttpClientModule,
     // Ng-Bootstrap
     NgbModule,
-    NgbTabsetModule
+    NgbTabsetModule,
+    MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatButtonModule, BrowserAnimationsModule 
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
   bootstrap: [AppComponent]

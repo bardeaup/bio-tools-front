@@ -68,10 +68,6 @@ export class RegisterComponent implements OnInit {
           this.isSignUpFailed = true;
         }
       );
-
-
-
-
     }
 
     /* this.loginservice.authenticate(this.loginForm.value.username, this.loginForm.value.password).subscribe(
