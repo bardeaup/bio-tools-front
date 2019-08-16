@@ -32,7 +32,7 @@
             </li>
 
             <li class="nav-item">
-                <a type="button" class="nav-link text-dark font-italic " (click)="displaySetup()">
+                <a class="nav-link text-dark font-italic" [routerLink]="'setup'">
                     <i class="fa fa-plus-square mr-3 text-primary fa-fw"></i>
                     Create new
                 </a>
@@ -46,7 +46,7 @@
         <ul class="nav flex-column bg-white mb-0">
             <li class="nav-item">
                 <a href="#" class="nav-link text-dark font-italic">
-                    <i class="fa fa-area-chart mr-3 text-primary fa-fw"></i>
+                    <i class="fa fa-area-chart mr-3 text-primary fa-fw "></i>
                     Area charts
                 </a>
             </li>
@@ -73,8 +73,9 @@
     <!-- End vertical navbar -->
 
 
-    <!-- Page content holder -->
+    <!-- Page content holder *ngIf=setupDisplayed-->
     <div class="w-100 p-3">
-        <app-experiment-setup *ngIf=setupDisplayed></app-experiment-setup>
+        <router-outlet></router-outlet>
+        <!-- <app-experiment-setup ></app-experiment-setup> -->
     </div>
 </div>

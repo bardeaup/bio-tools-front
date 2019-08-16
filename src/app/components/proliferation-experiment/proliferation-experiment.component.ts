@@ -11,8 +11,13 @@ export class ProliferationExperimentComponent {
 
   setupDisplayed:boolean = false;
 
-  constructor() {}
-  displaySetup(){
+  constructor(private route: ActivatedRoute,
+    private router: Router) {}
+  /* displaySetup(){
     this.setupDisplayed = true;
+  } */
+
+  displaySetup(){
+    this.router.navigate(['../setup'], { relativeTo: this.route })
   }
 }

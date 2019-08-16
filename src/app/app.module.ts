@@ -14,10 +14,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgbModule, NgbTabsetModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthInterceptor } from './auth/auth-interceptor.service';
 import { ProjectSummaryComponent } from './components/project-summary/project-summary.component';
-import { ProliferationExperimentComponent } from './components/proliferation-experiment/proliferation-experiment.component';
-import { MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatButtonModule } from  '@angular/material';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ExperimentSetupComponent } from './components/experiment-setup/experiment-setup.component';
+import { ProliferationExperimentModule } from './components/proliferation-experiment/proliferation-experiment.module';
 
 @NgModule({
   declarations: [
@@ -29,10 +26,9 @@ import { ExperimentSetupComponent } from './components/experiment-setup/experime
     HeaderComponent,
     ProliferationFormComponent,
     ProjectSummaryComponent,
-    ProliferationExperimentComponent,
-    ExperimentSetupComponent,  
   ],
   imports: [
+    ProliferationExperimentModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,
@@ -40,8 +36,6 @@ import { ExperimentSetupComponent } from './components/experiment-setup/experime
     HttpClientModule,
     // Ng-Bootstrap
     NgbModule,
-    NgbTabsetModule,
-    MatToolbarModule, MatIconModule, MatSidenavModule, MatListModule, MatButtonModule, BrowserAnimationsModule 
   ],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
   bootstrap: [AppComponent]
