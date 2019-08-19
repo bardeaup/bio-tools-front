@@ -2,111 +2,146 @@
 
 <div class="row m-0">
     <div class="col-5 px-5 py-4 mr-2 white-bg rounded">
-        <form>
+        <form [formGroup]="form">
             <h3 class="text-gray font-weight-bold pb-2">Common conditions</h3>
             <div class="form-group">
                 <label>Project name</label>
-                <input type="text" class="form-control" placeholder="Enter project name">
+                <input type="text" class="form-control" placeholder="Enter project name" formControlName="projectName">
                 <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
             </div>
             <hr class="my-4">
-
-            <div class="form-group row">
-                <div class="col">
-                    <label>Culture media</label>
-                    <input type="text" class="form-control" placeholder="Culture media">
-                    <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+            <div formGroupName="detail">
+                <div class="form-group row">
+                    <div class="col">
+                        <label>Culture media</label>
+                        <input type="text" class="form-control" placeholder="Culture media"
+                            formControlName="cultureMedia">
+                        <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+                    </div>
+                    <div class="col">
+                        <label>Growth factor</label>
+                        <input type="text" class="form-control" placeholder="Growth factor"
+                            formControlName="growthFactor">
+                    </div>
+                    <div class="col">
+                        <label>Antibiotic</label>
+                        <input type="text" class="form-control" placeholder="Antibiotic" formControlName="antibiotic">
+                    </div>
                 </div>
-                <div class="col">
-                    <label>Growth factor</label>
-                    <input type="text" class="form-control" placeholder="Growth factor">
+                <div class="form-group row">
+                    <div class="col">
+                        <label>O<sub>2</sub> %</label>
+                        <input type="number" class="form-control" placeholder="Dioxygen"
+                            formControlName="dioxygenPercentage">
+                    </div>
+                    <div class="col">
+                        <label>Temparature (°C)</label>
+                        <input type="number" class="form-control" placeholder="Temparature"
+                            formControlName="temperature">
+                    </div>
                 </div>
-                <div class="col">
-                    <label>Antibiotic</label>
-                    <input type="text" class="form-control" placeholder="Antibiotic">
+                <div class="form-group row">
+                    <label for="inputPassword" class="col-sm-8 col-form-label">How many times each conditions will be
+                        repeated?</label>
+                    <div class="col-sm-4">
+                        <input type="number" class="form-control" formControlName="conditionReplicat">
+                    </div>
                 </div>
             </div>
-            <div class="form-group row">
-                <div class="col">
-                    <label>O<sub>2</sub> %</label>
-                    <input type="number" class="form-control" placeholder="Dioxygen">
-                </div>
-                <div class="col">
-                    <label>Temparature (°C)</label>
-                    <input type="number" class="form-control" placeholder="Temparature">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="inputPassword" class="col-sm-10 col-form-label">How many times each conditions will be
-                    repeated?</label>
-                <div class="col-sm-2">
-                    <input type="number" class="form-control" id="inputPassword">
-                </div>
-            </div>
-            <!-- <div class="form-group form-check">
-                  <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                  <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                </div> -->
-            <!-- 
-        <button class="btn btn-primary">Add experiment conditions</button> -->
         </form>
     </div>
 
+    <!-- New conditions bloc -->
     <div class="col px-5 py-4 ml-2 white-bg rounded">
-        <div class="d-flex justify-content-between">
-            <h3 class="text-gray font-weight-bold ">Experiment conditions</h3>
-            <button type="button" class="btn btn-success btn-sm mb-auto" (click)="addCondition()">
-                New&nbsp;<i class="fa fa-plus-circle"></i>
-            </button>
-        </div>
-        <ngb-tabset #t="ngbTabset">
-            <ngb-tab id="tab-selectbyid1" title="1">
-                <ng-template ngbTabContent >
-                    <div class="mt-3 px-4">
-                        <div class="form-group row">
-                            <div class="col">
-                                <label>Cell line</label>
-                                <input type="text" class="form-control" placeholder="Enter project name">
-                                <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+        <form [formGroup]="form">
+            <div class="d-flex justify-content-between">
+                <h3 class="text-gray font-weight-bold ">Experiment conditions</h3>
+                <button type="button" class="btn btn-success btn-sm mb-auto" (click)="addCondition()">
+                    New&nbsp;<i class="fa fa-plus-circle"></i>
+                </button>
+            </div>
+            <ngb-tabset>
+                <ngb-tab formArrayName="conditionList"
+                    *ngFor="let condition of form.get('conditionList').controls; let i=index">
+                    <ng-template ngbTabTitle> {{i+1}}
+                        <span *ngIf="i>0">
+                            <a class="disable-link" (click)="deleteCondition($event, i)">
+                                <i class="fa fa-times-circle"></i>
+                            </a>
+                        </span>
+                    </ng-template>
+
+                    <ng-template ngbTabContent>
+                        <div class="px-4 tab-content" [formGroupName]="i">
+                            <div class="form-group row">
+                                <div class="col">
+                                    <label>Cell line</label>
+                                    <input type="text" class="form-control" placeholder="Enter project name"
+                                        formControlName="cellLine">
+                                </div>
+                                <div class="col">
+                                    <label>Initial population doubling</label>
+                                    <input type="text" class="form-control" placeholder="Initial population doubling">
+                                </div>
                             </div>
-                            <div class="col">
-                                <label>Initial population doubling</label>
-                                <input type="text" class="form-control" placeholder="Initial population doubling">
-                            </div>
-                        </div>
-                        <hr class="my-4">
-                       
-                        <div class="d-flex justify-content-between">
+                            <hr class="my-4">
+                            <!-- TREATMENTS -->
+                            <div class="d-flex justify-content-between">
                                 <h4 class="text-gray font-weight-bold darkcyan-font-color">Treatments</h4>
-                                <button type="button" class="btn btn-success btn-sm mb-auto" (click)="addTreatments()">
+                                <button type="button" class="btn btn-success btn-sm mb-auto" (click)="addTreatment(i)">
                                     New&nbsp;<i class="fa fa-plus-circle"></i>
                                 </button>
                             </div>
-                        <ngb-tabset #t="ngbTabset">
-                                <ngb-tab id="tab-selectbyid1" title="1">
+
+                            <!-- TREATMENTS -->
+                            <div *ngIf="condition.get('treatmentList').value.length > 0">{{condition.get('treatmentList').value.length}}
+                            <ngb-tabset>
+                                <ngb-tab formArrayName="treatmentList"
+                                    *ngFor="let treatment of condition.get('treatmentList').controls; let j=index">
+                                   
+                                    <ng-template ngbTabTitle >
+                                        <span>
+                                            <a class="disable-link" (click)="deleteTreatment($event, i, j)">
+                                                <i class="fa fa-times-circle"></i>
+                                            </a>
+                                        </span>
+                                    </ng-template>
                                     <ng-template ngbTabContent>
-                                        <div class="mt-3">
-                                            <div class="form-group row">
+                                        <div class="card card-body darkcyan-bg mt-3" [formGroupName]="j">
+                                            <label><i class="fas fa-flask"></i> Treatment {{t+1}}</label>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" formControlName="name"
+                                                    placeholder="Treatment name">
+                                            </div>
+                                            <div class="row">
                                                 <div class="col">
-                                                    <label>Cell line</label>
-                                                    <input type="text" class="form-control" placeholder="Enter project name">
-                                                    <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+                                                    <label>Concentration</label>
+                                                    <input type="text" class="form-control"
+                                                        formControlName="concentrationValue" placeholder="Value">
                                                 </div>
+
                                                 <div class="col">
-                                                    <label>Initial population doubling</label>
-                                                    <input type="text" class="form-control" placeholder="Initial population doubling">
+                                                    <label>Unit</label>
+                                                    <select class="custom-select" formControlName="concentrationUnit">
+                                                        <option
+                                                            *ngFor="let concentrationUnit of concentrationUnitRef ;let i = index"
+                                                            [value]="concentrationUnitRef[i].unitId">
+                                                            {{concentrationUnit.unitLabel}}
+                                                        </option>
+                                                    </select>
                                                 </div>
                                             </div>
-                                            <hr class="my-4">
                                         </div>
                                     </ng-template>
                                 </ngb-tab>
-                    
-                            </ngb-tabset>
-                    </div>
-                </ng-template>
-            </ngb-tab>
 
-        </ngb-tabset>
+                            </ngb-tabset>
+                        </div>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
+
+            </ngb-tabset>
+        </form>
     </div>
 </div>

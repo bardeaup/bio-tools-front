@@ -62,7 +62,7 @@ export class RegisterComponent implements OnInit {
           this.isSignUpFailed = false;
           this.router.navigate(['proliferation']);
         },
-        error => {
+        (error) => {
           console.log("sign up ERROR : ",error);
           this.errorMessage = error.error.message;
           this.isSignUpFailed = true;

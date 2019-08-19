@@ -9,3 +9,17 @@
 .darkcyan-font-color{
     color: darkcyan;
 }
+.darkcyan-bg{
+    background-color: #d0e9e9;
+}
+.tab-content {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 0 0 5px 5px;
+}
+
+.nav-tabs {
+    margin-bottom: 0;
+}
