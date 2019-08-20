@@ -5,7 +5,8 @@ import { ProliferationRoutingModule } from './proliferation-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ProliferationExperimentComponent } from './proliferation-experiment.component';
 import { ExperimentSetupComponent } from './experiment-setup/experiment-setup.component';
-import { NgbModule, NgbTabsetModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {MatRadioModule} from '@angular/material/radio'; 
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { NgbModule, NgbTabsetModule } from '@ng-bootstrap/ng-bootstrap';
     ProliferationRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NgbModule
+    NgbModule,
+    MatRadioModule
   ]
 })
 export class ProliferationExperimentModule { }

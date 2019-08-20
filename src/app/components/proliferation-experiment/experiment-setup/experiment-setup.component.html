@@ -79,11 +79,23 @@
                                     <input type="text" class="form-control" placeholder="Enter project name"
                                         formControlName="cellLine">
                                 </div>
+
                                 <div class="col">
                                     <label>Initial population doubling</label>
                                     <input type="text" class="form-control" placeholder="Initial population doubling">
                                 </div>
                             </div>
+                            <mat-radio-group>
+                                    <label>Cell type</label>
+                                    <div class="col">
+                                        <div class="row">
+                                            <mat-radio-button value="SUSPENSION" color="warn" disableRipple>Suspension</mat-radio-button>
+                                        </div>
+                                        <div class="row">
+                                            <mat-radio-button value="ADHERENT" color="warn" disableRipple>Adherent</mat-radio-button>
+                                        </div>
+                                    </div>
+                                </mat-radio-group>
                             <hr class="my-4">
                             <!-- TREATMENTS -->
                             <div class="d-flex justify-content-between">
@@ -94,12 +106,13 @@
                             </div>
 
                             <!-- TREATMENTS -->
-                            <div *ngIf="condition.get('treatmentList').value.length > 0">{{condition.get('treatmentList').value.length}}
-                            <ngb-tabset>
+
+
+                            <ngb-tabset *ngIf="condition.get('treatmentList').value.length > 0">
                                 <ngb-tab formArrayName="treatmentList"
                                     *ngFor="let treatment of condition.get('treatmentList').controls; let j=index">
-                                   
-                                    <ng-template ngbTabTitle >
+
+                                    <ng-template ngbTabTitle>{{j+1}}
                                         <span>
                                             <a class="disable-link" (click)="deleteTreatment($event, i, j)">
                                                 <i class="fa fa-times-circle"></i>
@@ -108,7 +121,7 @@
                                     </ng-template>
                                     <ng-template ngbTabContent>
                                         <div class="card card-body darkcyan-bg mt-3" [formGroupName]="j">
-                                            <label><i class="fas fa-flask"></i> Treatment {{t+1}}</label>
+                                            <label><i class="fas fa-flask"></i> Treatment {{j+1}}</label>
                                             <div class="form-group">
                                                 <input type="text" class="form-control" formControlName="name"
                                                     placeholder="Treatment name">
@@ -122,7 +135,8 @@
 
                                                 <div class="col">
                                                     <label>Unit</label>
-                                                    <select class="custom-select" formControlName="concentrationUnit">
+                                                    <select class="custom-select" formControlName="concentrationUnit"
+                                                        required>
                                                         <option
                                                             *ngFor="let concentrationUnit of concentrationUnitRef ;let i = index"
                                                             [value]="concentrationUnitRef[i].unitId">
@@ -136,12 +150,15 @@
                                 </ngb-tab>
 
                             </ngb-tabset>
-                        </div>
+
                         </div>
                     </ng-template>
                 </ngb-tab>
 
             </ngb-tabset>
         </form>
+        
+
     </div>
 </div>
+<button type="submit" class="btn btn-primary float-right mt-3">Save</button>

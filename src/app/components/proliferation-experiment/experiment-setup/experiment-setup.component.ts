@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { ConcentrationUnit } from 'src/app/models/concentration-unit';
+import { ConcentrationUnitService } from 'src/app/services/concentration-unit.service';
 
 @Component({
   selector: 'app-experiment-setup',
@@ -9,12 +11,18 @@ import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 export class ExperimentSetupComponent implements OnInit {
 
   private form: FormGroup;
+  concentrationUnitRef: ConcentrationUnit[];
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder,
+    private concentrationUnitService: ConcentrationUnitService) { }
 
   ngOnInit() {
     this.initForm();
-  }
+    this.concentrationUnitService.loadConcentrationUnitReferential().subscribe(
+      data => {this.concentrationUnitRef = data;
+      console.log("units :", this.concentrationUnitRef)}
+    )
+  } 
 
   initForm() {
     this.form = this.formBuilder.group({
@@ -38,13 +46,13 @@ export class ExperimentSetupComponent implements OnInit {
     return this.formBuilder.group({
       cellLine: [null, Validators.required],
       initialPopulationDoubling: [0, [Validators.min(0), Validators.max(900000000000000000), Validators.required]],
-      treatmentList: new FormArray([])
+      treatmentList: new FormArray([]),
     });
   }
 
   createTreatment(): FormGroup {
     return this.formBuilder.group({
-      name: [null, Validators.required],
+      name: ['null', Validators.required],
       concentrationValue: [null, [Validators.min(0), Validators.max(900000000000000000), Validators.required]],
       concentrationUnit: [null, Validators.required]
     })
@@ -69,23 +77,35 @@ export class ExperimentSetupComponent implements OnInit {
     this.conditionList.removeAt(id);
   }
 
-  getTreatmentList(i: number) {
-    let test = this.conditionList.value;
-    return test[i].treatmentList as FormArray;
-  }
-
   /**
    * add treatment
    * @param i index of conditionList
    */
   addTreatment(i: number) {
-    this.getTreatmentList(i).push(this.createTreatment());
-    console.log('form', this.form.value)
+
+    let j: number = 0;
+    for (let control of this.conditionList.controls) {
+      if (i === j) {
+        let treatmentList: FormArray = control.get('treatmentList') as FormArray;
+        treatmentList.push(this.createTreatment());
+      }
+      j++;
+    }
   }
+
 
   deleteTreatment(event, conditionListIndex: number, treatmentListIndex: number) {
     // blocage de la redirection déclanchée par la balise <a>
     event.preventDefault();
-    this.getTreatmentList(conditionListIndex).removeAt(treatmentListIndex);
+
+    let j: number = 0;
+    for (let control of this.conditionList.controls) {
+      if (conditionListIndex === j) {
+        let treatmentList: FormArray = control.get('treatmentList') as FormArray;
+        treatmentList.removeAt(treatmentListIndex);
+      }
+      j++;
+    }
+    
   }
 }
