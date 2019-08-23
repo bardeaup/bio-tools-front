@@ -19,8 +19,7 @@ export class ExperimentSetupComponent implements OnInit {
   ngOnInit() {
     this.initForm();
     this.concentrationUnitService.loadConcentrationUnitReferential().subscribe(
-      data => {this.concentrationUnitRef = data;
-      console.log("units :", this.concentrationUnitRef)}
+      data => {this.concentrationUnitRef = data;}
     )
   } 
 
@@ -30,7 +29,7 @@ export class ExperimentSetupComponent implements OnInit {
       detail: this.formBuilder.group({
         cultureMedia: [null, Validators.required],
         growthFactor: [null, Validators.required],
-        antibiotic: [null, Validators.required],
+        antibiotic: null,
         dioxygenPercentage: [null, [Validators.min(0), Validators.max(100), Validators.required]],
         temperature: [null, [Validators.min(0), Validators.max(100), Validators.required]],
         conditionReplicat: [1, [Validators.min(1), Validators.max(100), Validators.required]]
@@ -45,6 +44,7 @@ export class ExperimentSetupComponent implements OnInit {
   createCondition(): FormGroup {
     return this.formBuilder.group({
       cellLine: [null, Validators.required],
+      isAdherentCell: [null, Validators.required],
       initialPopulationDoubling: [0, [Validators.min(0), Validators.max(900000000000000000), Validators.required]],
       treatmentList: new FormArray([]),
     });
@@ -107,5 +107,11 @@ export class ExperimentSetupComponent implements OnInit {
       j++;
     }
     
+  }
+
+
+  /** Enregistrement de la base de l'expérience */
+  submitForm(){
+    console.log('submit : ', this.form.value);
   }
 }

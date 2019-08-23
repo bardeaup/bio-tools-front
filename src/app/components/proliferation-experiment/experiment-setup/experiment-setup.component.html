@@ -85,14 +85,14 @@
                                     <input type="text" class="form-control" placeholder="Initial population doubling">
                                 </div>
                             </div>
-                            <mat-radio-group>
+                            <mat-radio-group formControlName="isAdherentCell" >
                                     <label>Cell type</label>
                                     <div class="col">
                                         <div class="row">
-                                            <mat-radio-button value="SUSPENSION" color="warn" disableRipple>Suspension</mat-radio-button>
+                                            <mat-radio-button value="false" color="warn" disableRipple>Suspension</mat-radio-button>
                                         </div>
                                         <div class="row">
-                                            <mat-radio-button value="ADHERENT" color="warn" disableRipple>Adherent</mat-radio-button>
+                                            <mat-radio-button value="true" color="warn" disableRipple>Adherent</mat-radio-button>
                                         </div>
                                     </div>
                                 </mat-radio-group>
@@ -161,4 +161,4 @@
 
     </div>
 </div>
-<button type="submit" class="btn btn-primary float-right mt-3">Save</button>
+<button type="submit" class="btn btn-primary float-right mt-3" [disabled]="!form.valid" (click)="submitForm()"><i class="fas fa-cloud-download-alt"></i>  Save</button>
