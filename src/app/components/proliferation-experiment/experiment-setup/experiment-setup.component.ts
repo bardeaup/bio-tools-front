@@ -2,6 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ConcentrationUnit } from 'src/app/models/concentration-unit';
 import { ConcentrationUnitService } from 'src/app/services/concentration-unit.service';
+import { ProliferationExperimentDetail } from 'src/app/models/proliferation-experiment-detail';
+import { Condition } from 'src/app/models/condition';
+import { CellularCountProject } from 'src/app/models/cellular-count-project';
+import { ExperimentService } from 'src/app/services/experiment.service';
+import { Treatment } from 'src/app/models/treatment';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ErrorCustom } from 'src/app/models/error-custom';
+
 
 @Component({
   selector: 'app-experiment-setup',
@@ -12,9 +20,13 @@ export class ExperimentSetupComponent implements OnInit {
 
   private form: FormGroup;
   concentrationUnitRef: ConcentrationUnit[];
+  private error: ErrorCustom = null;
 
   constructor(private formBuilder: FormBuilder,
-    private concentrationUnitService: ConcentrationUnitService) { }
+    private concentrationUnitService: ConcentrationUnitService,
+    private experimentService: ExperimentService,
+    private route: ActivatedRoute,
+    private router: Router ) { }
 
   ngOnInit() {
     this.initForm();
@@ -22,6 +34,7 @@ export class ExperimentSetupComponent implements OnInit {
       data => {this.concentrationUnitRef = data;}
     )
   } 
+
 
   initForm() {
     this.form = this.formBuilder.group({
@@ -31,7 +44,7 @@ export class ExperimentSetupComponent implements OnInit {
         growthFactor: [null, Validators.required],
         antibiotic: null,
         dioxygenPercentage: [null, [Validators.min(0), Validators.max(100), Validators.required]],
-        temperature: [null, [Validators.min(0), Validators.max(100), Validators.required]],
+        temperature: [37, [Validators.min(0), Validators.max(100), Validators.required]],
         conditionReplicat: [1, [Validators.min(1), Validators.max(100), Validators.required]]
       }),
       conditionList: this.formBuilder.array([this.createCondition()])
@@ -52,7 +65,7 @@ export class ExperimentSetupComponent implements OnInit {
 
   createTreatment(): FormGroup {
     return this.formBuilder.group({
-      name: ['null', Validators.required],
+      name: [null, Validators.required],
       concentrationValue: [null, [Validators.min(0), Validators.max(900000000000000000), Validators.required]],
       concentrationUnit: [null, Validators.required]
     })
@@ -113,5 +126,43 @@ export class ExperimentSetupComponent implements OnInit {
   /** Enregistrement de la base de l'expérience */
   submitForm(){
     console.log('submit : ', this.form.value);
+    const formValue = this.form.value;
+
+    let detail: ProliferationExperimentDetail  = new ProliferationExperimentDetail(
+      formValue.detail.cultureMedia, formValue.detail.growthFactor,
+      formValue.detail.antibiotic, formValue.detail.dioxygenPercentage,
+      formValue.detail.temperature, formValue.detail.conditionReplicat);
+
+    let conditionList: Condition[] = [];
+    formValue.conditionList.forEach(c => {
+      let treatmentList: Treatment[] = [];
+      if(c.treatmentList !== null){
+        c.treatmentList.forEach(t => {
+          console.log('t : ',t);
+          treatmentList.push(new Treatment(t.name, t.concentrationValue, t.concentrationUnit));
+          console.log('traitements boucle : ',treatmentList);
+        })
+      }
+      console.log('traitements  : ',treatmentList);
+      conditionList.push(new Condition(c.cellLine, c.isAdherentCell === "ADHERENT",
+        null, treatmentList, c.initialPopulationDoubling));
+    });
+
+    let project: CellularCountProject = new CellularCountProject(formValue.projectName, detail, conditionList);
+    console.log("mapped project object : ", project); 
+
+    this.experimentService.saveCellCountExperiment(project).subscribe(
+      id => {
+        // Redirect to edit component with experiment id into the url
+        this.router.navigate(['../edit', id], { relativeTo: this.route })
+      },
+      (err) => {
+        console.log(err.error)
+        this.error = new ErrorCustom(err.error.msg, err.error.severity);
+        if( err.error.msg.indexOf('project') >= 0){
+          this.form.get('projectName').reset();
+        }
+      }
+    );
   }
 }

@@ -1,11 +1,13 @@
 <h1 class="text-gray font-weight-bold title_block mb-3">Design your proliferation experiment</h1>
-
+<div *ngIf="error && error.severity === 'WARNING'" class="alert alert-danger" role="alert">
+    {{error.msg | capitalizeFirst}}
+  </div>
 <div class="row m-0">
     <div class="col-5 px-5 py-4 mr-2 white-bg rounded">
         <form [formGroup]="form">
             <h3 class="text-gray font-weight-bold pb-2">Common conditions</h3>
             <div class="form-group">
-                <label>Project name</label>
+                <label>Project name *</label>
                 <input type="text" class="form-control" placeholder="Enter project name" formControlName="projectName">
                 <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
             </div>
@@ -13,7 +15,7 @@
             <div formGroupName="detail">
                 <div class="form-group row">
                     <div class="col">
-                        <label>Culture media</label>
+                        <label>Culture media *</label>
                         <input type="text" class="form-control" placeholder="Culture media"
                             formControlName="cultureMedia">
                         <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
@@ -75,27 +77,28 @@
                         <div class="px-4 tab-content" [formGroupName]="i">
                             <div class="form-group row">
                                 <div class="col">
-                                    <label>Cell line</label>
-                                    <input type="text" class="form-control" placeholder="Enter project name"
+                                    <label>Cell line *</label>
+                                    <input type="text" class="form-control" placeholder="Enter cell line"
                                         formControlName="cellLine">
                                 </div>
 
                                 <div class="col">
                                     <label>Initial population doubling</label>
-                                    <input type="text" class="form-control" placeholder="Initial population doubling">
+                                    <input type="text" class="form-control" placeholder="Initial population doubling"
+                                    formControlName="initialPopulationDoubling">
                                 </div>
                             </div>
-                            <mat-radio-group formControlName="isAdherentCell" >
-                                    <label>Cell type</label>
-                                    <div class="col">
-                                        <div class="row">
-                                            <mat-radio-button value="false" color="warn" disableRipple>Suspension</mat-radio-button>
-                                        </div>
-                                        <div class="row">
-                                            <mat-radio-button value="true" color="warn" disableRipple>Adherent</mat-radio-button>
-                                        </div>
+                            <mat-radio-group formControlName="isAdherentCell">
+                                <label>Cell type *</label>
+                                <div class="col">
+                                    <div class="row">
+                                        <mat-radio-button value="ADHERENT" color="warn" disableRipple>Adherent</mat-radio-button>
                                     </div>
-                                </mat-radio-group>
+                                    <div class="row">
+                                        <mat-radio-button value="SUSPENSION" color="warn" disableRipple>Suspension</mat-radio-button>
+                                    </div>
+                                </div>
+                            </mat-radio-group>
                             <hr class="my-4">
                             <!-- TREATMENTS -->
                             <div class="d-flex justify-content-between">
@@ -123,18 +126,19 @@
                                         <div class="card card-body darkcyan-bg mt-3" [formGroupName]="j">
                                             <label><i class="fas fa-flask"></i> Treatment {{j+1}}</label>
                                             <div class="form-group">
+                                                <label>Treatment *</label>
                                                 <input type="text" class="form-control" formControlName="name"
                                                     placeholder="Treatment name">
                                             </div>
                                             <div class="row">
                                                 <div class="col">
-                                                    <label>Concentration</label>
+                                                    <label>Concentration *</label>
                                                     <input type="text" class="form-control"
                                                         formControlName="concentrationValue" placeholder="Value">
                                                 </div>
 
                                                 <div class="col">
-                                                    <label>Unit</label>
+                                                    <label>Unit *</label>
                                                     <select class="custom-select" formControlName="concentrationUnit"
                                                         required>
                                                         <option
@@ -157,8 +161,9 @@
 
             </ngb-tabset>
         </form>
-        
+
 
     </div>
 </div>
-<button type="submit" class="btn btn-primary float-right mt-3" [disabled]="!form.valid" (click)="submitForm()"><i class="fas fa-cloud-download-alt"></i>  Save</button>
+<button type="submit" class="btn btn-primary float-right mt-3" [disabled]="!form.valid" (click)="submitForm()"><i
+        class="fas fa-cloud-download-alt"></i> Save</button>

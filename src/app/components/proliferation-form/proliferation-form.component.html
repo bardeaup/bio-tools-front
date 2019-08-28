@@ -30,7 +30,7 @@
     </form>
     <!-- Summary table -->
     <div *ngIf="experimentSaved">
-      <app-project-summary [experiment]="experimentSaved" (newCountEvent)="addNewCount($event)"></app-project-summary>
+      <!-- <app-project-summary [experiment]="experimentSaved" (newCountEvent)="addNewCount($event)"></app-project-summary> -->
       <button type="button" class="btn btn-primary btn-sm" (click)="newCondition()">
         New condition&nbsp;<i class="fa fa-plus-circle"></i>
       </button>

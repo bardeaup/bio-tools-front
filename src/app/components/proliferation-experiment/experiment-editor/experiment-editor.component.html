@@ -1,0 +1,43 @@
+<h1 class="text-gray font-weight-bold title_block mb-3">{{experiment.projectName | capitalizeFirst}} experiment</h1>
+<div class="row m-0">
+    <div class="col-5 px-5 py-4 mr-2 white-bg rounded">
+        <h3 class="text-gray font-weight-bold pb-3">Common conditions summary</h3>
+        <div class="row">
+            <div class="col">
+                <p>
+                    <span class="card-subtitle mb-1 text-muted">Culture media : </span>
+                    {{experiment.detail.cultureMedia}}
+                </p>
+                <p>
+                        <span class="card-subtitle mb-1 text-muted">Antibiotic : </span>
+                        {{experiment.detail.antibiotic}}
+                    </p>
+                    <p>
+                            <span class="card-subtitle mb-1 text-muted">Dioxygen : </span>
+                            {{experiment.detail.dioxygenPercentage}}%
+                        </p>
+            </div>
+            
+            <div class="col">
+                <p>
+                    <span class="card-subtitle mb-1 text-muted">Growth factor : </span>
+                    {{experiment.detail.growthFactor}}
+                </p>
+                <p>
+                        <span class="card-subtitle mb-1 text-muted">Temperature : </span>
+                        {{experiment.detail.temperature}}°C
+                    </p>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="col px-5 py-4 ml-2 white-bg rounded">
+        <h3 class="text-gray font-weight-bold pb-3">Conditions</h3>
+        <app-project-summary [experiment]="experiment"></app-project-summary>
+    </div>
+</div>
+
+<!-- Exemple for count block navigation when conditionReplicat > 1
+     https://stackblitz.com/angular/rlqpoaprpepd?file=app%2Fstepper-overview-example.html 
+-->

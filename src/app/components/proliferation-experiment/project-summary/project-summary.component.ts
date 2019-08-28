@@ -12,7 +12,7 @@ export class ProjectSummaryComponent implements OnInit {
   constructor(private experimentService: ExperimentService) { }
 
   @Input() experiment: CellularCountProject;
-  @Output() newCountEvent = new EventEmitter<string>();
+/*   @Output() newCountEvent = new EventEmitter<string>(); */
   
 
   ngOnInit() {}
@@ -20,9 +20,9 @@ export class ProjectSummaryComponent implements OnInit {
   /**
    * Inform Proliferation Form Component (parent) to add a new count to the condition.
    */
-  newCount() {
+  /* newCount() {
     this.newCountEvent.emit("addNewCount");
-  }
+  } */
 
 }
 

@@ -13,6 +13,10 @@ const routes: Routes = [
   {path: 'register', component: RegisterComponent},
   { path: 'logout', component: LogoutComponent , canActivate:[AuthGuardService]},
   { path: 'proliferation-old', component: ProliferationFormComponent , canActivate:[AuthGuardService]},
+/*   {
+    path: 'proliferation',
+    loadChildren: () => import('./components/proliferation-experiment/proliferation-experiment.module').then(mod => mod.ProliferationExperimentModule)
+  }, */
   { path: '**', redirectTo: '' }
 ];
 

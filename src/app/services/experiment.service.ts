@@ -12,6 +12,10 @@ export class ExperimentService {
   
   constructor(private http: HttpClient) { }
   
+  saveCellCountExperiment(e: CellularCountProject): Observable<CellularCountProject> {
+    return this.http.post<CellularCountProject>(this.experimentUrl, e);
+  }
+
 
   cellCountExperimentTreatment(e: CellularCountProject): Observable<CellularCountProject> {
     return this.http.post<CellularCountProject>(this.experimentUrl, e);
@@ -24,6 +28,11 @@ export class ExperimentService {
   loadUserExperimentByName(experimentName: string): Observable<CellularCountProject> {
     //let params = new HttpParams().set('name', experimentName);
     return this.http.get<CellularCountProject>(`${this.experimentUrl}/${experimentName}`);
+  }
+
+  loadUserExperimentById(experimentId: number): Observable<CellularCountProject> {
+    //let params = new HttpParams().set('name', experimentName);
+    return this.http.get<CellularCountProject>(`${this.experimentUrl}/${experimentId}`);
   }
 }
 

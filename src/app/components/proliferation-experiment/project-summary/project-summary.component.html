@@ -12,21 +12,19 @@
             <tr *ngFor="let condition of experiment.conditionList ; index as i">
                 <th scope="row">{{ i + 1 }}</th>
                 <td>
-                  {{ condition.cellLine }}
+                    {{ condition.cellLine }}
                 </td>
                 <td>
-                    <tr class="background-transparent" *ngFor="let treatment of condition.treatmentList">{{treatment.name}}&nbsp;-&nbsp;
-                        {{treatment.concentrationValue}}&nbsp;{{treatment.concentrationUnitLabel}}
-                    </tr>
-                </td>
-               <!--  <td *ngFor="let treatment of condition.treatements">
-                  <tr >{{ treatment.name }} - </tr>
-                </td> -->
-                <td>
+            <tr class="background-transparent" *ngFor="let treatment of condition.treatmentList">
+                {{treatment.name}}&nbsp;-&nbsp;
+                {{treatment.concentrationValue}}&nbsp;{{treatment.concentrationUnitLabel}}
+            </tr>
+            </td>
+            <td>
                 <button type="button" class="btn btn-primary btn-sm" (click)="newCount()">
                     New&nbsp;<i class="fa fa-plus-circle"></i>
                 </button>
-                </td>
+            </td>
             </tr>
         </tbody>
     </table>

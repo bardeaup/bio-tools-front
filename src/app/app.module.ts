@@ -11,9 +11,8 @@ import { LogoutComponent } from './components/logout/logout.component';
 import { HeaderComponent } from './components/header/header.component';
 import { ProliferationFormComponent } from './components/proliferation-form/proliferation-form.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgbModule, NgbTabsetModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthInterceptor } from './auth/auth-interceptor.service';
-import { ProjectSummaryComponent } from './components/project-summary/project-summary.component';
 import { ProliferationExperimentModule } from './components/proliferation-experiment/proliferation-experiment.module';
 
 @NgModule({
@@ -25,7 +24,6 @@ import { ProliferationExperimentModule } from './components/proliferation-experi
     LogoutComponent,
     HeaderComponent,
     ProliferationFormComponent,
-    ProjectSummaryComponent,
   ],
   imports: [
     ProliferationExperimentModule,

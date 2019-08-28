@@ -120,10 +120,10 @@ export class ProliferationFormComponent implements OnInit {
       });
     }
 
-      let condition: Condition = new Condition(formValue.condition.cellLine, countList, treatmentList, formValue.condition.initialPopulationDoubling);
+     // let condition: Condition = new Condition(formValue.condition.cellLine,formValue.conditi ,countList, treatmentList, formValue.condition.initialPopulationDoubling);
 
-
-      let project: CellularCountProject = new CellularCountProject(formValue.projectName, [condition]);
+     let condition;
+      let project: CellularCountProject = new CellularCountProject(formValue.projectName, null,[condition]);
 
       console.log("modele mappé avant envoi au service : ", project);
       // Envoi des données au BACK -> enregistrement en BDD et calcul des PD et DT.

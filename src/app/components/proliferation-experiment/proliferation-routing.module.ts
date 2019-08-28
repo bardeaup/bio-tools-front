@@ -1,18 +1,23 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuardService } from 'src/app/services/auth-guard.service';
-import { ProliferationExperimentComponent } from './proliferation-experiment.component';
+import { ExperimentMenuComponent } from './experiment-menu/experiment-menu.component';
 import { ExperimentSetupComponent } from './experiment-setup/experiment-setup.component';
+import { ExperimentEditorComponent } from './experiment-editor/experiment-editor.component';
 
 const proliferationRoutes: Routes = [
     {
         path: 'proliferation',
-        component: ProliferationExperimentComponent,
+        component: ExperimentMenuComponent,
         canActivate: [AuthGuardService],
         children: [
             {
-                path: 'setup',
+                path: 'create',
                 component: ExperimentSetupComponent
+            },
+            {
+                path: 'edit/:id',
+                component: ExperimentEditorComponent
             }
         ]
     }

@@ -4,14 +4,16 @@ import { Treatment } from './treatment';
 
 export class Condition {
     cellLine: string;
+    isAdherentCell: boolean;
     initialPopulationDoubling?: number;
-    cellCountList: CellCount[];
+    cellCountList?: CellCount[];
     treatmentList?: Treatment[];
 
 
-    constructor(cellLine: string, cellCountList: CellCount[],
+    constructor(cellLine: string, isAdherentCell: boolean, cellCountList?: CellCount[],
         treatmentList?: Treatment[], initialPopulationDoubling?: number) {
         this.cellLine = cellLine;
+        this.isAdherentCell = isAdherentCell;
         this.cellCountList = cellCountList;
         this.treatmentList = treatmentList;
         this.initialPopulationDoubling = initialPopulationDoubling;
