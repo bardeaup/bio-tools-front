@@ -16,7 +16,7 @@ const proliferationRoutes: Routes = [
                 component: ExperimentSetupComponent
             },
             {
-                path: 'edit/:id',
+                path: 'edit',
                 component: ExperimentEditorComponent
             }
         ]

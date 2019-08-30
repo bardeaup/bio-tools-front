@@ -9,6 +9,7 @@ import { ExperimentService } from 'src/app/services/experiment.service';
 import { Treatment } from 'src/app/models/treatment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorCustom } from 'src/app/models/error-custom';
+import { ActualExperimentService } from 'src/app/services/actual-experiment.service';
 
 
 @Component({
@@ -25,6 +26,7 @@ export class ExperimentSetupComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private concentrationUnitService: ConcentrationUnitService,
     private experimentService: ExperimentService,
+    private actualExperimentService : ActualExperimentService,
     private route: ActivatedRoute,
     private router: Router ) { }
 
@@ -152,9 +154,12 @@ export class ExperimentSetupComponent implements OnInit {
     console.log("mapped project object : ", project); 
 
     this.experimentService.saveCellCountExperiment(project).subscribe(
-      id => {
+      data => {
         // Redirect to edit component with experiment id into the url
-        this.router.navigate(['../edit', id], { relativeTo: this.route })
+        this.actualExperimentService.updateActualExperiment(data).subscribe(
+          data => this.router.navigate(['../edit'], { relativeTo: this.route })
+        );
+        
       },
       (err) => {
         console.log(err.error)

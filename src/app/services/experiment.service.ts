@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CellularCountProject } from '../models/cellular-count-project';
 
@@ -9,6 +9,7 @@ import { CellularCountProject } from '../models/cellular-count-project';
 export class ExperimentService {
 
   private experimentUrl = 'http://localhost:8080/api/proliferation-experiment';
+
   
   constructor(private http: HttpClient) { }
   
@@ -26,13 +27,13 @@ export class ExperimentService {
   }
 
   loadUserExperimentByName(experimentName: string): Observable<CellularCountProject> {
-    //let params = new HttpParams().set('name', experimentName);
-    return this.http.get<CellularCountProject>(`${this.experimentUrl}/${experimentName}`);
-  }
+    let params = new HttpParams().set('name', experimentName);
+    return this.http.get<CellularCountProject>(this.experimentUrl, {params});
+  } 
 
-  loadUserExperimentById(experimentId: number): Observable<CellularCountProject> {
-    //let params = new HttpParams().set('name', experimentName);
-    return this.http.get<CellularCountProject>(`${this.experimentUrl}/${experimentId}`);
+  loadUserExperimentById(experimentId: string): Observable<CellularCountProject> {
+    let params = new HttpParams().set('id', experimentId);
+    return this.http.get<CellularCountProject>(this.experimentUrl, {params});
   }
 }
 

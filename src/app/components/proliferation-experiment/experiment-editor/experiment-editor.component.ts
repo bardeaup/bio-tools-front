@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ExperimentService } from 'src/app/services/experiment.service';
 import { CellularCountProject } from 'src/app/models/cellular-count-project';
 import { ErrorCustom } from 'src/app/models/error-custom';
+import { ActualExperimentService } from 'src/app/services/actual-experiment.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-experiment-editor',
@@ -11,16 +13,24 @@ import { ErrorCustom } from 'src/app/models/error-custom';
 })
 export class ExperimentEditorComponent implements OnInit {
 
-  id: number;
-  private sub: any;
+  subscription: Subscription;
   experiment: CellularCountProject;
   error: ErrorCustom = null;
 
   constructor(private route: ActivatedRoute,
-    private experimentService : ExperimentService) { }
+    private actualExperimentService: ActualExperimentService) {
+    this.subscription = this.actualExperimentService.exp$.subscribe(
+      data => {this.experiment = data;
+      console.log('hey oh ! ', this.experiment)}
+    );
+  }
+
+
+
+
 
   ngOnInit() {
-    this.sub = this.route.params.subscribe(params => {
+    /* this.sub = this.route.params.subscribe(params => {
       // get experiment id parameter from url to load experiment saved
       this.id = +params['id']; 
       this.experimentService.loadUserExperimentById(this.id).subscribe(
@@ -28,11 +38,11 @@ export class ExperimentEditorComponent implements OnInit {
         (err) => this.error = err
       )
    });
-   console.log("experiment : ",this.experiment)
+   console.log("experiment : ",this.experiment) */
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    /* this.sub.unsubscribe(); */
   }
 
 }

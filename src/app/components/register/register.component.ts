@@ -3,6 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SignUpInfo } from 'src/app/auth/signup-info';
 import { AuthService } from 'src/app/auth/auth.service';
+import { AuthLoginInfo } from 'src/app/auth/login-info';
+import { TokenStorageService } from 'src/app/auth/token-storage.service';
 
 @Component({
   selector: 'app-register',
@@ -20,8 +22,10 @@ export class RegisterComponent implements OnInit {
 
   constructor(private router: Router,
     private formBuilder: FormBuilder,
-    private authService: AuthService) { }
+    private authService: AuthService,
+    private tokenStorage: TokenStorageService) { }
 
+    
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
       username: ['', Validators.required],
@@ -46,8 +50,6 @@ export class RegisterComponent implements OnInit {
 
     } else {
       this.passwordError = false;
-      // TODO register
-
 
       this.signupInfo = new SignUpInfo(
         form.name,
@@ -57,28 +59,34 @@ export class RegisterComponent implements OnInit {
 
       this.authService.signUp(this.signupInfo).subscribe(
         data => {
-          console.log("sign up OK : ",data);
           this.isSignedUp = true;
           this.isSignUpFailed = false;
-          this.router.navigate(['proliferation']);
+          this.login();
         },
         (error) => {
-          console.log("sign up ERROR : ",error);
           this.errorMessage = error.error.message;
           this.isSignUpFailed = true;
         }
       );
     }
+  }
 
-    /* this.loginservice.authenticate(this.loginForm.value.username, this.loginForm.value.password).subscribe(
-      user => console.log("user", user)
-    )
-
-    if (this.loginservice.authenticate(this.loginForm.value.username, this.loginForm.value.password).subscribe) {
-      this.router.navigate([''])
-      this.invalidLogin = false
-    } else
-      this.invalidLogin = true
-  } */
+  login(){
+    let loginInfo = new AuthLoginInfo(
+      this.signupInfo.username,
+      this.signupInfo.password);
+  
+    this.authService.attemptAuth(loginInfo).subscribe(
+      data => {
+        this.tokenStorage.saveToken(data.accessToken);
+        this.tokenStorage.saveUsername(data.username);
+        this.tokenStorage.saveAuthorities(data.authorities);
+        this.router.navigate(['proliferation']);
+      },
+      error => {
+        console.log(error);
+        this.errorMessage = error.error.message;
+      }
+    );
   }
 }

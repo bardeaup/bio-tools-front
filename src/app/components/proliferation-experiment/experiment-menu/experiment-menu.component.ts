@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ExperimentService } from 'src/app/services/experiment.service';
+import { CellularCountProject } from 'src/app/models/cellular-count-project';
+import { ErrorCustom } from 'src/app/models/error-custom';
 
 @Component({
   selector: 'app-experiment-menu',
@@ -8,12 +11,27 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class ExperimentMenuComponent {
 
-  setupDisplayed:boolean = false;
+  setupDisplayed: boolean = false;
+  experimentName: string;
+  experiment: CellularCountProject;
+  error: ErrorCustom;
 
   constructor(private route: ActivatedRoute,
-    private router: Router) {}
-  /* displaySetup(){
-    this.setupDisplayed = true;
-  } */
+    private router: Router,
+    private experimentService: ExperimentService) { }
+
+
+  findExperimentByName() {
+    if (this.experimentName) {
+      this.experimentService.loadUserExperimentByName(this.experimentName).subscribe(
+
+        data => {
+        this.experiment = data;
+        this.router.navigate(['edit'], { relativeTo: this.route })
+        },
+        (err) => this.error = err
+      )
+    }
+  }
 
 }
