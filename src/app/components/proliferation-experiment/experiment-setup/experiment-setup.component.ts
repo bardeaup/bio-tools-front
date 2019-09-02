@@ -9,7 +9,6 @@ import { ExperimentService } from 'src/app/services/experiment.service';
 import { Treatment } from 'src/app/models/treatment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorCustom } from 'src/app/models/error-custom';
-import { ActualExperimentService } from 'src/app/services/actual-experiment.service';
 
 
 @Component({
@@ -26,16 +25,15 @@ export class ExperimentSetupComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private concentrationUnitService: ConcentrationUnitService,
     private experimentService: ExperimentService,
-    private actualExperimentService : ActualExperimentService,
     private route: ActivatedRoute,
-    private router: Router ) { }
+    private router: Router) { }
 
   ngOnInit() {
     this.initForm();
     this.concentrationUnitService.loadConcentrationUnitReferential().subscribe(
-      data => {this.concentrationUnitRef = data;}
+      data => { this.concentrationUnitRef = data; }
     )
-  } 
+  }
 
 
   initForm() {
@@ -121,16 +119,16 @@ export class ExperimentSetupComponent implements OnInit {
       }
       j++;
     }
-    
+
   }
 
 
   /** Enregistrement de la base de l'expérience */
-  submitForm(){
+  submitForm() {
     console.log('submit : ', this.form.value);
     const formValue = this.form.value;
 
-    let detail: ProliferationExperimentDetail  = new ProliferationExperimentDetail(
+    let detail: ProliferationExperimentDetail = new ProliferationExperimentDetail(
       formValue.detail.cultureMedia, formValue.detail.growthFactor,
       formValue.detail.antibiotic, formValue.detail.dioxygenPercentage,
       formValue.detail.temperature, formValue.detail.conditionReplicat);
@@ -138,33 +136,30 @@ export class ExperimentSetupComponent implements OnInit {
     let conditionList: Condition[] = [];
     formValue.conditionList.forEach(c => {
       let treatmentList: Treatment[] = [];
-      if(c.treatmentList !== null){
+      if (c.treatmentList !== null) {
         c.treatmentList.forEach(t => {
-          console.log('t : ',t);
+          console.log('t : ', t);
           treatmentList.push(new Treatment(t.name, t.concentrationValue, t.concentrationUnit));
-          console.log('traitements boucle : ',treatmentList);
+          console.log('traitements boucle : ', treatmentList);
         })
       }
-      console.log('traitements  : ',treatmentList);
+      console.log('traitements  : ', treatmentList);
       conditionList.push(new Condition(c.cellLine, c.isAdherentCell === "ADHERENT",
         null, treatmentList, c.initialPopulationDoubling));
     });
 
     let project: CellularCountProject = new CellularCountProject(formValue.projectName, detail, conditionList);
-    console.log("mapped project object : ", project); 
+    console.log("mapped project object : ", project);
 
     this.experimentService.saveCellCountExperiment(project).subscribe(
       data => {
-        // Redirect to edit component with experiment id into the url
-        this.actualExperimentService.updateActualExperiment(data).subscribe(
-          data => this.router.navigate(['../edit'], { relativeTo: this.route })
-        );
-        
+        this.router.navigate(['../edit'], { relativeTo: this.route });
+        this.experimentService.updateExperiment(data);
       },
       (err) => {
         console.log(err.error)
         this.error = new ErrorCustom(err.error.msg, err.error.severity);
-        if( err.error.msg.indexOf('project') >= 0){
+        if (err.error.msg.indexOf('project') >= 0) {
           this.form.get('projectName').reset();
         }
       }

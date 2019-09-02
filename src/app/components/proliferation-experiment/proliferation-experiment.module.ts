@@ -27,6 +27,7 @@ import { ProjectSummaryComponent } from './project-summary/project-summary.compo
     HttpClientModule,
     NgbModule,
     MatRadioModule
-  ]
+  ],
+  providers: []
 })
 export class ProliferationExperimentModule { }

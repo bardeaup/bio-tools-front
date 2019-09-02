@@ -25,12 +25,13 @@ export class ExperimentMenuComponent {
     if (this.experimentName) {
       this.experimentService.loadUserExperimentByName(this.experimentName).subscribe(
 
-        data => {
-        this.experiment = data;
-        this.router.navigate(['edit'], { relativeTo: this.route })
+        experiment => {
+          console.log("findExperimentByName", experiment);
+          this.experimentService.updateExperiment(experiment);
+          this.router.navigate(['edit'], { relativeTo: this.route });
         },
         (err) => this.error = err
-      )
+      );
     }
   }
 

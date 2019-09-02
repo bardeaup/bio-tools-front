@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { CellularCountProject } from '../models/cellular-count-project';
 
 @Injectable({
@@ -9,7 +9,10 @@ import { CellularCountProject } from '../models/cellular-count-project';
 export class ExperimentService {
 
   private experimentUrl = 'http://localhost:8080/api/proliferation-experiment';
+  expSource = new BehaviorSubject<CellularCountProject>(new CellularCountProject(null,null,null));
 
+  // Observable string streams
+  exp$ = this.expSource.asObservable();
   
   constructor(private http: HttpClient) { }
   
@@ -29,6 +32,10 @@ export class ExperimentService {
   loadUserExperimentByName(experimentName: string): Observable<CellularCountProject> {
     let params = new HttpParams().set('name', experimentName);
     return this.http.get<CellularCountProject>(this.experimentUrl, {params});
+  } 
+
+  updateExperiment(experiment: CellularCountProject){
+    this.expSource.next(experiment);
   } 
 
   loadUserExperimentById(experimentId: string): Observable<CellularCountProject> {
