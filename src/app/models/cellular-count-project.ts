@@ -2,6 +2,7 @@ import { Condition } from './condition';
 import { ProliferationExperimentDetail } from './proliferation-experiment-detail';
 
 export class CellularCountProject {
+    id: number;
     projectName: string;
     detail: ProliferationExperimentDetail;
     conditionList: Condition[];

@@ -18,7 +18,7 @@
             <li class="nav-item">
                 <div class="input-group my-3">
                     <input type="text" class="form-control" placeholder="Experiment name" aria-label="Experiment name"
-                        [(ngModel)]="experimentName" aria-describedby="basic-addon2">
+                        [(ngModel)]="experimentName" (keyup.enter)="findExperimentByName()" aria-describedby="basic-addon2">
                     <div class="input-group-append">
                         <button class="btn btn-outline-success" type="button" (click)="findExperimentByName()">Find</button>
                     </div>

@@ -1,45 +1,96 @@
-<!-- <div *ngIf="experiment"> -->
-<h1 class="text-gray font-weight-bold title_block mb-3">{{experiment.projectName | capitalizeFirst}} experiment</h1>
-<div class="row m-0">
-    <div class="col-5 px-5 py-4 mr-2 white-bg rounded">
-        <h3 class="text-gray font-weight-bold pb-3">Common conditions summary</h3>
-        <div class="row">
-            <div class="col">
-                <p>
-                    <span class="card-subtitle mb-1 text-muted">Culture media : </span>
-                    {{experiment.detail.cultureMedia}}
-                </p>
-                <p>
+<div>
+    <h1 class="text-gray font-weight-bold title_block mb-3">{{experiment.projectName | capitalizeFirst}} experiment</h1>
+    <div class="row m-0">
+        <div class="col-5 px-5 py-4 mr-2 white-bg rounded">
+            <h3 class="text-gray font-weight-bold pb-3">Summary</h3>
+            <div *ngIf="experiment.detail" class="row">
+                <div class="col">
+                    <p>
+                        <span class="card-subtitle mb-1 text-muted">Culture media : </span>
+                        {{experiment.detail.cultureMedia}}
+                    </p>
+                    <p>
                         <span class="card-subtitle mb-1 text-muted">Antibiotic : </span>
                         {{experiment.detail.antibiotic}}
                     </p>
                     <p>
-                            <span class="card-subtitle mb-1 text-muted">Dioxygen : </span>
-                            {{experiment.detail.dioxygenPercentage}}%
-                        </p>
-            </div>
-            
-            <div class="col">
-                <p>
-                    <span class="card-subtitle mb-1 text-muted">Growth factor : </span>
-                    {{experiment.detail.growthFactor}}
-                </p>
-                <p>
+                        <span class="card-subtitle mb-1 text-muted">Dioxygen : </span>
+                        {{experiment.detail.dioxygenPercentage}}%
+                    </p>
+                </div>
+                <div class="col">
+                    <p>
+                        <span class="card-subtitle mb-1 text-muted">Growth factor : </span>
+                        {{experiment.detail.growthFactor}}
+                    </p>
+                    <p>
                         <span class="card-subtitle mb-1 text-muted">Temperature : </span>
                         {{experiment.detail.temperature}}°C
                     </p>
+                </div>
+            </div>
+            <hr class="mb-4">
+            <div class="m-0 mt-3 white-bg rounded">
+
+                <h3 class="text-gray font-weight-bold pb-3">Conditions</h3>
+                <app-project-summary [experiment]="experiment" (newCountEvent)="newCountSavingForm($event)">
+                </app-project-summary>
+
+            </div>
+        </div>
+
+        <!-- Bloc de saisie de compte cellulaire -->
+        <div class="col px-5 ml-2 white-bg rounded" *ngIf="countSavingForm">
+            <div class="my-4">
+                <div class="btn-group row justify-content-center">
+                    <button type="button" class="btn btn-outline-secondary"
+                        [ngClass]="{'active': selectedView === 'COUNT_FORM'}" (click)="selectView('COUNT_FORM')">Count
+                        form
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary"
+                        [ngClass]="{'active': selectedView === 'GRAPH', 'disabled': !graphAvailable}">Graph<span
+                            *ngIf="graphAvailable" (click)="selectView('GRAPH')"> </span>
+                    </button>
+                </div>
             </div>
 
+            <div [formGroup]="countSavingForm" class="row">
 
+                <div class="col w-50">
+                    <h3 class="text-gray font-weight-bold mt-2 pb-2">Counting day</h3>
+                    <div class="form-group pb-2">
+                        <ngb-timepicker formControlName="time" [meridian]=true></ngb-timepicker>
+                    </div>
+                    <mat-form-field>
+                        <input matInput [matDatepicker]="picker" placeholder="Choose a date (MM/dd/YYYY)"
+                            formControlName="date">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+
+                </div>
+                <div class="col">
+                    <h3 class="text-gray font-weight-bold mt-2 pb-5">Count list</h3>
+                    <div formArrayName="quantity"
+                        *ngFor="let value of countSavingForm.get('quantity').controls; let i = index">
+                        <div class="input-group mb-3" [formGroupName]="i">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">{{i+1}}</span>
+                            </div>
+                            <input type="text" class="form-control" aria-label="Sizing example input"
+                                aria-describedby="inputGroup-sizing-default" formControlName="value">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-end mb-2">
+                <button type="submit" class="btn btn-primary float-right mt-3" [disabled]="!countSavingForm.valid"
+                    (click)="submitForm()">
+                    <i class="fas fa-cloud-download-alt"></i> Save</button>
+            </div>
+
+            <div id="graph"></div>
         </div>
     </div>
-    <div class="col px-5 py-4 ml-2 white-bg rounded">
-        <h3 class="text-gray font-weight-bold pb-3">Conditions</h3>
-        <app-project-summary [experiment]="experiment"></app-project-summary>
-    </div>
-</div>
 
-<!-- Exemple for count block navigation when conditionReplicat > 1
-     https://stackblitz.com/angular/rlqpoaprpepd?file=app%2Fstepper-overview-example.html 
--->
-<!-- </div> -->
+</div>

@@ -16,6 +16,7 @@ export class ExperimentMenuComponent {
   experiment: CellularCountProject;
   error: ErrorCustom;
 
+
   constructor(private route: ActivatedRoute,
     private router: Router,
     private experimentService: ExperimentService) { }
@@ -35,4 +36,5 @@ export class ExperimentMenuComponent {
     }
   }
 
-}
+
+ }

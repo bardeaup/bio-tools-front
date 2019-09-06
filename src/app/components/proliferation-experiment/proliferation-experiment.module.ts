@@ -6,7 +6,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { ExperimentMenuComponent } from './experiment-menu/experiment-menu.component';
 import { ExperimentSetupComponent } from './experiment-setup/experiment-setup.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import {MatRadioModule} from '@angular/material/radio'; 
+import { MatRadioModule } from '@angular/material/radio'; 
+import { MatStepperModule, MatFormFieldModule, MatButtonModule, MatInputModule, MatRippleModule, MatDatepickerModule, MatNativeDateModule } from '@angular/material';
 import { CapitalizeFirstPipe } from 'src/app/pipe/capitalizefirst.pipe';
 import { ExperimentEditorComponent } from './experiment-editor/experiment-editor.component';
 import { ProjectSummaryComponent } from './project-summary/project-summary.component';
@@ -26,7 +27,8 @@ import { ProjectSummaryComponent } from './project-summary/project-summary.compo
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
-    MatRadioModule
+    MatRadioModule,
+    MatStepperModule, MatFormFieldModule, MatButtonModule, MatInputModule, MatRippleModule, MatDatepickerModule,  MatNativeDateModule,
   ],
   providers: []
 })

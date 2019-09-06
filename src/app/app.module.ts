@@ -12,8 +12,10 @@ import { HeaderComponent } from './components/header/header.component';
 import { ProliferationFormComponent } from './components/proliferation-form/proliferation-form.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatStepperModule, MatFormFieldModule, MatButtonModule, MatInputModule, MatRippleModule } from '@angular/material';
 import { AuthInterceptor } from './auth/auth-interceptor.service';
 import { ProliferationExperimentModule } from './components/proliferation-experiment/proliferation-experiment.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,12 @@ import { ProliferationExperimentModule } from './components/proliferation-experi
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    MatStepperModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRippleModule,
+    BrowserAnimationsModule,
     // Ng-Bootstrap
     NgbModule,
   ],

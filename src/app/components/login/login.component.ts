@@ -28,7 +28,6 @@ export class LoginComponent implements OnInit {
     if (this.tokenStorage.getToken()) {
       this.isLoggedIn = true;
       this.roles = this.tokenStorage.getAuthorities();
-      // this.router.navigate(['']);
     }
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],

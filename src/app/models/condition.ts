@@ -3,6 +3,7 @@ import { Treatment } from './treatment';
 
 
 export class Condition {
+    id: number;
     cellLine: string;
     isAdherentCell: boolean;
     initialPopulationDoubling?: number;

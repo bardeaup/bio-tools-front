@@ -12,17 +12,17 @@ export class ProjectSummaryComponent implements OnInit {
   constructor(private experimentService: ExperimentService) { }
 
   @Input() experiment: CellularCountProject;
-/*   @Output() newCountEvent = new EventEmitter<string>(); */
+  @Output() newCountEvent = new EventEmitter<number>();
   
 
   ngOnInit() {}
   
-  /**
-   * Inform Proliferation Form Component (parent) to add a new count to the condition.
+  /* *
+   * Inform Proliferation parent Component to add a new count to the condition.
    */
-  /* newCount() {
-    this.newCountEvent.emit("addNewCount");
-  } */
+  newCount(conditionId: number) {
+    this.newCountEvent.emit(conditionId);
+  }
 
 }
 

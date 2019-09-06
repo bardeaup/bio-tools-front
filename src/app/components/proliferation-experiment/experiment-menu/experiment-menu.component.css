@@ -2,7 +2,7 @@
 .vertical-nav {
     min-width: 17rem;
     width: 17rem;
-    height: 100vh;
+    height: calc(100vh - 3em);
     top: 0;
     left: 0;
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
