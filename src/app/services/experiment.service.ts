@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { CellularCountProject } from '../models/cellular-count-project';
+import { CellCount } from '../models/cell-count';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,9 @@ export class ExperimentService {
     return this.http.post<CellularCountProject>(this.experimentUrl, e);
   }
 
+  saveCellCountPerCondition(e: CellCount[]): Observable<CellularCountProject> {
+    return this.http.post<CellularCountProject>(this.experimentUrl+'/count', e);
+  }
 
   cellCountExperimentTreatment(e: CellularCountProject): Observable<CellularCountProject> {
     return this.http.post<CellularCountProject>(this.experimentUrl, e);

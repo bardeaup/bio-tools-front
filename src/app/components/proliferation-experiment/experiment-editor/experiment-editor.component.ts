@@ -1,15 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CellularCountProject } from 'src/app/models/cellular-count-project';
 import { ErrorCustom } from 'src/app/models/error-custom';
 import { ExperimentService } from 'src/app/services/experiment.service';
-import { FormBuilder, Validators, FormArray, FormGroup } from '@angular/forms';
-import { Location } from '@angular/common';
-import * as moment from 'moment';
+import { FormBuilder, Validators, FormArray, FormGroup, FormControl } from '@angular/forms';
 import { Condition } from 'src/app/models/condition';
-
-
-
+import * as moment from 'moment';
+import { format } from 'util';
+import { FocusMonitor } from '@angular/cdk/a11y';
+import { CellCount } from 'src/app/models/cell-count';
 
 @Component({
   selector: 'app-experiment-editor',
@@ -22,7 +21,7 @@ export class ExperimentEditorComponent implements OnInit {
   experiment: CellularCountProject = null;
   error: ErrorCustom = null;
   countSavingForm: FormGroup;
-  selectedConditionId: number;
+  selectedCondition: Condition;
   selectedView: string;
   graphAvailable: boolean = false;
 
@@ -35,26 +34,26 @@ export class ExperimentEditorComponent implements OnInit {
       experiment => {
         this.experiment = experiment;
       });
-      if (this.experiment.detail === null) {
-        this.router.navigate(['proliferation']);
-      }
+    if (this.experiment.detail === null) {
+      this.router.navigate(['proliferation']);
+    }
   }
   newCountSavingForm(conditionId: number) {
     this.selectedView = 'COUNT_FORM';
-    this.selectedConditionId = conditionId;
+    this.experiment.conditionList.forEach(function (condition) {
+      if (condition.id === conditionId) {
+        this.selectedCondition = condition;
+      }
+    }, this);
+    const today = new Date();
     this.countSavingForm = this.formBuilder.group({
-      date: [new Date(), Validators.required],
+      date: [moment([today.getFullYear(), today.getMonth(), today.getDate()]), Validators.required],
       time: [{ hour: null, minute: null }, Validators.required],
       quantity: this.formBuilder.array([])
     })
-    console.log(this.experiment.detail.conditionReplicat)
-    for(let i: number = 0; i < this.experiment.detail.conditionReplicat; i++ ){
+    for (let i: number = 0; i < this.experiment.detail.conditionReplicat; i++) {
       this.quantityArray.push(this.createQuantityValue());
     }
-
-
-    console.log('form : ', this.countSavingForm);
-
   }
 
   createQuantityValue(): FormGroup {
@@ -67,15 +66,23 @@ export class ExperimentEditorComponent implements OnInit {
     return this.countSavingForm.get('quantity') as FormArray;
   }
 
-  selectView(view: string){
+  selectView(view: string) {
     this.selectedView = view;
   }
 
 
-  submitForm(){
+  submitForm() {
     let form = this.countSavingForm.value;
-    console.log('form to save :', form)
+    // 1 - La date
+    let date = moment(form.date, 'YYYY-MM-DD')
+      .add(form.time.hour, 'hour')
+      .add(form.time.minute, 'minute').toDate();
 
+    let cellCountList: CellCount[] = []
+    form.quantity.forEach(q => {
+      cellCountList.push(new CellCount(this.selectedCondition.id, q.value, date));
+    }, this);
+    this.experimentService.saveCellCountPerCondition(cellCountList).subscribe();
   }
 
 }

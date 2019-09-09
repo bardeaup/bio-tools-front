@@ -106,10 +106,10 @@ export class ProliferationFormComponent implements OnInit {
 
       // TODO : message d'erreur pour la validation des dates
       this.invalidEndingDate = finalDate <= initialDate;
-      if (!this.invalidEndingDate) {
+     /*  if (!this.invalidEndingDate) {
         let count: CellCount = new CellCount(c.initialQuantity, initialDate, c.finalQuantity, finalDate);
         countList.push(count);
-      }
+      } */
     // Mapping de la liste de traitements utilisés
     let treatmentList: Treatment[] = null;
     if (formValue.condition.treatments !== null) {

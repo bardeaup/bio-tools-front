@@ -53,7 +53,23 @@
                     </button>
                 </div>
             </div>
-
+            <div *ngIf="selectedCondition" class="mb-3" class="row">
+                <div class="col">
+                    <strong>Cells : </strong> {{selectedCondition.cellLine}}
+                </div>
+                <div class="col" *ngIf="selectedCondition.treatmentList !== 0">
+                    <strong *ngIf="selectedCondition.treatmentList.length > 1">Treatments
+                        : </strong>
+                    <strong *ngIf="selectedCondition.treatmentList.length === 1">Treatment
+                        : </strong>
+                    <ul>
+                        <li *ngFor="let t of selectedCondition.treatmentList">
+                            {{t.name}}&nbsp;:&nbsp;{{t.concentrationValue}}
+                            &nbsp;{{t.concentrationUnitLabel}}</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="mb-4">
             <div [formGroup]="countSavingForm" class="row">
 
                 <div class="col w-50">
