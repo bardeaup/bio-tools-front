@@ -40,7 +40,7 @@
         </div>
 
         <!-- Bloc de saisie de compte cellulaire -->
-        <div class="col px-5 ml-2 white-bg rounded" *ngIf="countSavingForm">
+        <div class="col px-5 ml-2 white-bg rounded" *ngIf="firstCountForm">
             <div class="my-4">
                 <div class="btn-group row justify-content-center">
                     <button type="button" class="btn btn-outline-secondary"
@@ -70,7 +70,7 @@
                 </div>
             </div>
             <hr class="mb-4">
-            <div [formGroup]="countSavingForm" class="row">
+            <div [formGroup]="firstCountForm" class="row">
 
                 <div class="col w-50">
                     <h3 class="text-gray font-weight-bold mt-2 pb-2">Counting day</h3>
@@ -88,7 +88,7 @@
                 <div class="col">
                     <h3 class="text-gray font-weight-bold mt-2 pb-5">Count list</h3>
                     <div formArrayName="quantity"
-                        *ngFor="let value of countSavingForm.get('quantity').controls; let i = index">
+                        *ngFor="let value of firstCountForm.get('quantity').controls; let i = index">
                         <div class="input-group mb-3" [formGroupName]="i">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroup-sizing-default">{{i+1}}</span>
@@ -100,7 +100,7 @@
                 </div>
             </div>
             <div class="row d-flex justify-content-end mb-2">
-                <button type="submit" class="btn btn-primary float-right mt-3" [disabled]="!countSavingForm.valid"
+                <button type="submit" class="btn btn-primary float-right mt-3" [disabled]="!firstCountForm.valid"
                     (click)="submitForm()">
                     <i class="fas fa-cloud-download-alt"></i> Save</button>
             </div>
