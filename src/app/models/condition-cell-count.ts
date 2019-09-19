@@ -1,28 +1,29 @@
-import { CountingEvent } from './couting-event';
+import { CellCount } from './cell-count';
 
 /**
  * Object used to save & treat data 
  */
 export class ConditionCellCount {
 
-    private conditionId: number;
-    private replicatQuantity: number;
+    conditionId: number;
+    
+    replicatQuantity: number;
 
     /**
      * Seeded cells for a particular conditionId (list of n CellCount with n = replicatQuantity + period treated)
      */
-    private seededCount?: CountingEvent;
+    seededCounts?: CellCount[];
 
     /**
      * Final cell count for a particular conditionId (list of n CellCount with n = replicatQuantity + period treated)
      */
-    private finalCount?: CountingEvent;
+    finalCounts?: CellCount[];
     
     constructor(conditionId: number, replicatQuantity: number, 
-        seededCount?: CountingEvent, finalCount?: CountingEvent){
+        seededCount?: CellCount[], finalCount?: CellCount[]){
             this.conditionId = conditionId;
             this.replicatQuantity = replicatQuantity;
-            this.seededCount = seededCount;
-            this.finalCount = finalCount;
+            this.seededCounts = seededCount;
+            this.finalCounts = finalCount;
         }
 }

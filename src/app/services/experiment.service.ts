@@ -22,8 +22,8 @@ export class ExperimentService {
     return this.http.post<CellularCountProject>(this.experimentUrl, e);
   }
 
-  saveCellCountPerCondition(e: ConditionCellCount): Observable<CellularCountProject> {
-    return this.http.post<CellularCountProject>(this.experimentUrl+'/count', e);
+  saveCellCountPerCondition(e: ConditionCellCount): Observable<ConditionCellCount> {
+    return this.http.post<ConditionCellCount>(this.experimentUrl+'/count', e);
   }
 
   cellCountExperimentTreatment(e: CellularCountProject): Observable<CellularCountProject> {

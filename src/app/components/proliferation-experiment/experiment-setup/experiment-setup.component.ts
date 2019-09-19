@@ -145,7 +145,7 @@ export class ExperimentSetupComponent implements OnInit {
       }
       console.log('traitements  : ', treatmentList);
       conditionList.push(new Condition(c.cellLine, c.isAdherentCell === "ADHERENT",
-        null, treatmentList, c.initialPopulationDoubling));
+        null, null, null,treatmentList, c.initialPopulationDoubling));
     });
 
     let project: CellularCountProject = new CellularCountProject(formValue.projectName, detail, conditionList);

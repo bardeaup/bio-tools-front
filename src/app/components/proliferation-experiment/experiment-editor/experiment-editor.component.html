@@ -40,7 +40,7 @@
         </div>
 
         <!-- Bloc de saisie de compte cellulaire -->
-        <div class="col px-5 ml-2 white-bg rounded" *ngIf="firstCountForm">
+        <div class="col px-5 ml-2 white-bg rounded" *ngIf="selectedCondition">
             <div class="my-4">
                 <div class="btn-group row justify-content-center">
                     <button type="button" class="btn btn-outline-secondary"
@@ -70,10 +70,14 @@
                 </div>
             </div>
             <hr class="mb-4">
-            <div [formGroup]="firstCountForm" class="row">
+
+            <!-- Formulaires saisie compte cellulaire -->
+
+            <!-- 1er compte de cellules - 1er ensemencement -->
+            <div [formGroup]="firstCountForm" class="row" *ngIf="selectedCondition.firstSeeding">
 
                 <div class="col w-50">
-                    <h3 class="text-gray font-weight-bold mt-2 pb-2">Counting day</h3>
+                    <h3 class="text-gray font-weight-bold mt-2 pb-2">First seeding</h3>
                     <div class="form-group pb-2">
                         <ngb-timepicker formControlName="time" [meridian]=true></ngb-timepicker>
                     </div>
@@ -83,26 +87,83 @@
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
-
                 </div>
                 <div class="col">
                     <h3 class="text-gray font-weight-bold mt-2 pb-5">Count list</h3>
-                    <div formArrayName="quantity"
-                        *ngFor="let value of firstCountForm.get('quantity').controls; let i = index">
-                        <div class="input-group mb-3" [formGroupName]="i">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroup-sizing-default">{{i+1}}</span>
+                    <div *ngIf="selectedCondition.firstSeeding">
+                        <div formArrayName="quantity"
+                            *ngFor="let value of firstCountForm.get('quantity').controls; let i = index">
+                            <div class="input-group mb-3" [formGroupName]="i">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">{{i+1}}</span>
+                                </div>
+                                <input type="text" class="form-control" aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-default" formControlName="value">
                             </div>
-                            <input type="text" class="form-control" aria-label="Sizing example input"
-                                aria-describedby="inputGroup-sizing-default" formControlName="value">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Formulaire complet -->
+            <div *ngIf="!selectedCondition.firstSeeding" [formGroup]="countForm" class="row">
+                <h3 class="text-gray font-weight-bold mt-2 pb-2 w-100">Counting day</h3>
+                <div class="row w-100 d-flex align-items-center">
+                    <div class="col">
+                        <div class="form-group pb-2">
+                            <ngb-timepicker formControlName="time" [meridian]=true></ngb-timepicker>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <mat-form-field>
+                            <input matInput [matDatepicker]="picker" placeholder="Choose a date (MM/dd/YYYY)"
+                                formControlName="date">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+
+                    </div>
+                </div>
+                <div class="row w-100">
+                    <div class="col">
+                        <p>Final Quantity for period {{selectedCondition.lastPeriod}}</p>
+                        <div formArrayName="finalQuantity"
+                            *ngFor="let value of countForm.get('finalQuantity').controls; let i = index">
+
+                            <div class="input-group mb-3" [formGroupName]="i">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">{{i+1}}</span>
+                                </div>
+                                <input type="text" class="form-control" aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-default" formControlName="value">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <p>Seeded Quantity</p>
+                        <div formArrayName="seededQuantity"
+                            *ngFor="let value of countForm.get('seededQuantity').controls; let i = index">
+                            <div class="input-group mb-3" [formGroupName]="i">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">{{i+1}}</span>
+                                </div>
+                                <input type="text" class="form-control" aria-label="Sizing example input"
+                                    aria-describedby="inputGroup-sizing-default" formControlName="value">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row d-flex justify-content-end mb-2">
-                <button type="submit" class="btn btn-primary float-right mt-3" [disabled]="!firstCountForm.valid"
-                    (click)="submitForm()">
-                    <i class="fas fa-cloud-download-alt"></i> Save</button>
+                <button type="submit" class="btn btn-primary float-right mt-3" *ngIf="selectedCondition.firstSeeding"
+                    [disabled]="!firstCountForm.valid" (click)="submitFormFirstSeending()">
+                    <i class="fas fa-cloud-download-alt"></i> Save
+                </button>
+                <button type="submit" class="btn btn-primary float-right mt-3" *ngIf="!selectedCondition.firstSeeding"
+                    [disabled]="!countForm.valid" (click)="submitForm()">
+                    <i class="fas fa-cloud-download-alt"></i> Save
+                </button>
             </div>
 
             <div id="graph"></div>
