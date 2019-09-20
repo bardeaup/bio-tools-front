@@ -141,7 +141,7 @@
                         </div>
                     </div>
                     <div class="col">
-                        <p>Seeded Quantity</p>
+                        <p>Seeded Quantity for period {{selectedCondition.lastPeriod+1}}</p>
                         <div formArrayName="seededQuantity"
                             *ngFor="let value of countForm.get('seededQuantity').controls; let i = index">
                             <div class="input-group mb-3" [formGroupName]="i">

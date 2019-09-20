@@ -49,7 +49,7 @@ export class ExperimentEditorComponent implements OnInit {
 
         // Premier ensemmencement de cellules
         if (this.selectedCondition.firstSeeding) {
-          console.log('1',this.selectedCondition);
+          console.log('1', this.selectedCondition);
           this.countForm = null;
           this.firstCountForm = this.formBuilder.group({
             date: [moment([today.getFullYear(), today.getMonth(), today.getDate()]), Validators.required],
@@ -61,9 +61,9 @@ export class ExperimentEditorComponent implements OnInit {
           }
         } else { // Ensemmencement de cellules != du premier avec une quantité
           // comptée et ré-ensemencée
-          console.log('2+',this.selectedCondition);
+          console.log('2+', this.selectedCondition);
           this.firstCountForm = null;
-  
+
           this.countForm = this.formBuilder.group({
             date: [moment([today.getFullYear(), today.getMonth(), today.getDate()]), Validators.required],
             time: [{ hour: null, minute: null }, Validators.required],
@@ -104,40 +104,74 @@ export class ExperimentEditorComponent implements OnInit {
     this.selectedView = view;
   }
 
-  submitForm(){}
+
   submitFormFirstSeending() {
-    if (this.selectedCondition.firstSeeding) {
-      let form = this.firstCountForm.value;
-      // 1 - La date
-      let date = moment(form.date, 'YYYY-MM-DD')
-        .add(form.time.hour, 'hour')
-        .add(form.time.minute, 'minute').toDate();
+    let form = this.firstCountForm.value;
+    // 1 - La date
+    let date = moment(form.date, 'YYYY-MM-DD')
+      .add(form.time.hour, 'hour')
+      .add(form.time.minute, 'minute').toDate();
 
-      let cellCountList: CellCount[] = []
-      form.quantity.forEach(q => {
-        cellCountList.push(new CellCount(q.value, q.replicatId, date, 1, this.selectedCondition.initialPopulationDoubling));
-      }, this);
+    let cellCountList: CellCount[] = []
+    form.quantity.forEach(q => {
+      cellCountList.push(new CellCount(q.value, q.replicatId, date, 1, this.selectedCondition.initialPopulationDoubling));
+    }, this);
 
-      let firstCount: ConditionCellCount = new ConditionCellCount(this.selectedCondition.id, this.experiment.detail.conditionReplicat,
-        cellCountList, null);
+    let firstCount: ConditionCellCount = new ConditionCellCount(this.selectedCondition.id, this.experiment.detail.conditionReplicat,
+      cellCountList, null);
 
-        console.log('firstCount form : ',firstCount)
+    console.log('firstCount form : ', firstCount)
 
 
-      this.experimentService.saveCellCountPerCondition(firstCount).subscribe(
-        addedCount => {
-          console.log('addedCount', addedCount);
-          this.experiment.conditionList.forEach(condition => {
-            if(condition.id === addedCount.conditionId){
-              condition.cellCountList = addedCount.seededCounts;
-              condition.firstSeeding = false;
-              // condition.cellCountList.push.apply(condition.cellCountList, addedCount.seededCounts);
-              console.log('refresh experiment : ',this.experiment)
-            }
-          });
-        }
-        // OK => modification de experiment pour dire que ce n'est pas le premier ensemencement
-      );
-    }
+    this.experimentService.saveCellCountPerCondition(firstCount).subscribe(
+      addedCount => {
+        console.log('addedCount', addedCount);
+        this.experiment.conditionList.forEach(condition => {
+          if (condition.id === addedCount.conditionId) {
+            condition.cellCountList = addedCount.seededCounts;
+            condition.firstSeeding = false;
+            // condition.cellCountList.push.apply(condition.cellCountList, addedCount.seededCounts);
+            console.log('refresh experiment : ', this.experiment)
+          }
+        });
+        this.selectedCondition = null;
+      },
+      (error) => {
+        console.log("error on saving first cell count", error);
+      }
+    );
+
+  }
+
+  submitForm() {
+    let form = this.countForm.value;
+    console.log('form : ', form);
+
+    // Final count :
+    let finalCountDate = moment(form.date, 'YYYY-MM-DD')
+      .add(form.time.hour, 'hour')
+      .add(form.time.minute, 'minute').toDate();
+
+    let finalCellCountList: CellCount[] = []
+    form.finalQuantity.forEach(q => {
+      finalCellCountList.push(new CellCount(q.value, q.replicatId, finalCountDate, this.selectedCondition.lastPeriod));
+    }, this);
+
+    let nextSeedingCellCountList: CellCount[] = []
+    form.seededQuantity.forEach(q => {
+      nextSeedingCellCountList.push(new CellCount(q.value, q.replicatId, finalCountDate, this.selectedCondition.lastPeriod+1));
+    }, this);
+
+    let conditionCount: ConditionCellCount = new ConditionCellCount(this.selectedCondition.id, this.experiment.detail.conditionReplicat,
+      nextSeedingCellCountList, finalCellCountList);
+
+    this.experimentService.saveCellCountPerCondition(conditionCount).subscribe(
+      addedCount => {
+        console.log('addedCount', addedCount);
+      },
+      (err) => {
+        console.log('addedCount err', err);
+      }
+    )
   }
 }
