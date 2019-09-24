@@ -42,13 +42,14 @@ export class ExperimentEditorComponent implements OnInit {
   }
   newCountSavingForm(conditionId: number) {
     this.selectedView = 'COUNT_FORM';
+
     this.experiment.conditionList.forEach(function (condition) {
       if (condition.id === conditionId) {
         this.selectedCondition = condition;
         const today = new Date();
 
         // Premier ensemmencement de cellules
-        if (this.selectedCondition.firstSeeding) {
+        if (this.selectedCondition.actualPeriod === null) {
           console.log('1', this.selectedCondition);
           this.countForm = null;
           this.firstCountForm = this.formBuilder.group({
@@ -125,16 +126,17 @@ export class ExperimentEditorComponent implements OnInit {
 
     this.experimentService.saveCellCountPerCondition(firstCount).subscribe(
       addedCount => {
-        console.log('addedCount', addedCount);
-        this.experiment.conditionList.forEach(condition => {
-          if (condition.id === addedCount.conditionId) {
-            condition.cellCountList = addedCount.seededCounts;
-            condition.firstSeeding = false;
-            // condition.cellCountList.push.apply(condition.cellCountList, addedCount.seededCounts);
-            console.log('refresh experiment : ', this.experiment)
-          }
-        });
         this.selectedCondition = null;
+        console.log('addedCount', addedCount);
+        this.experimentService.loadUserExperimentById(this.experiment.id.toString()).subscribe(
+          experiment => {
+            console.log("id", experiment);
+            this.experimentService.updateExperiment(experiment);
+          },
+          (err) => {
+            console.log('addedCount err', err);
+          }
+        )
       },
       (error) => {
         console.log("error on saving first cell count", error);
@@ -152,14 +154,20 @@ export class ExperimentEditorComponent implements OnInit {
       .add(form.time.hour, 'hour')
       .add(form.time.minute, 'minute').toDate();
 
-    let finalCellCountList: CellCount[] = []
+    let finalCellCountList: CellCount[] = [];
+    let actualPeriod: number = 1;
+    if (this.selectedCondition.actualPeriod) {
+      actualPeriod = this.selectedCondition.actualPeriod;
+    }
+
     form.finalQuantity.forEach(q => {
-      finalCellCountList.push(new CellCount(q.value, q.replicatId, finalCountDate, this.selectedCondition.lastPeriod));
+
+      finalCellCountList.push(new CellCount(q.value, q.replicatId, finalCountDate, actualPeriod));
     }, this);
 
     let nextSeedingCellCountList: CellCount[] = []
     form.seededQuantity.forEach(q => {
-      nextSeedingCellCountList.push(new CellCount(q.value, q.replicatId, finalCountDate, this.selectedCondition.lastPeriod+1));
+      nextSeedingCellCountList.push(new CellCount(q.value, q.replicatId, finalCountDate, actualPeriod + 1));
     }, this);
 
     let conditionCount: ConditionCellCount = new ConditionCellCount(this.selectedCondition.id, this.experiment.detail.conditionReplicat,
@@ -168,10 +176,15 @@ export class ExperimentEditorComponent implements OnInit {
     this.experimentService.saveCellCountPerCondition(conditionCount).subscribe(
       addedCount => {
         console.log('addedCount', addedCount);
-      },
-      (err) => {
-        console.log('addedCount err', err);
-      }
-    )
+        this.experimentService.loadUserExperimentById(this.experiment.id.toString()).subscribe(
+          experiment => {
+            console.log("id", experiment);
+            this.experimentService.updateExperiment(experiment);
+          },
+          (err) => {
+            console.log('addedCount err', err);
+          }
+        )
+      })
   }
 }

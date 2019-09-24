@@ -74,7 +74,8 @@
             <!-- Formulaires saisie compte cellulaire -->
 
             <!-- 1er compte de cellules - 1er ensemencement -->
-            <div [formGroup]="firstCountForm" class="row" *ngIf="selectedCondition.firstSeeding">
+            <div [formGroup]="firstCountForm" class="row" 
+                *ngIf="!selectedCondition.actualPeriod || selectedCondition.actualPeriod === 0">
 
                 <div class="col w-50">
                     <h3 class="text-gray font-weight-bold mt-2 pb-2">First seeding</h3>
@@ -90,24 +91,21 @@
                 </div>
                 <div class="col">
                     <h3 class="text-gray font-weight-bold mt-2 pb-5">Count list</h3>
-                    <div *ngIf="selectedCondition.firstSeeding">
-                        <div formArrayName="quantity"
-                            *ngFor="let value of firstCountForm.get('quantity').controls; let i = index">
-                            <div class="input-group mb-3" [formGroupName]="i">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="inputGroup-sizing-default">{{i+1}}</span>
-                                </div>
-                                <input type="text" class="form-control" aria-label="Sizing example input"
-                                    aria-describedby="inputGroup-sizing-default" formControlName="value">
+                    <div formArrayName="quantity"
+                        *ngFor="let value of firstCountForm.get('quantity').controls; let i = index">
+                        <div class="input-group mb-3" [formGroupName]="i">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">{{i+1}}</span>
                             </div>
+                            <input type="text" class="form-control" aria-label="Sizing example input"
+                                aria-describedby="inputGroup-sizing-default" formControlName="value">
                         </div>
                     </div>
-
                 </div>
             </div>
 
             <!-- Formulaire complet -->
-            <div *ngIf="!selectedCondition.firstSeeding" [formGroup]="countForm" class="row">
+            <div *ngIf="selectedCondition.actualPeriod >= 1" [formGroup]="countForm" class="row">
                 <h3 class="text-gray font-weight-bold mt-2 pb-2 w-100">Counting day</h3>
                 <div class="row w-100 d-flex align-items-center">
                     <div class="col">
@@ -127,7 +125,7 @@
                 </div>
                 <div class="row w-100">
                     <div class="col">
-                        <p>Final Quantity for period {{selectedCondition.lastPeriod}}</p>
+                        <p>Final Quantity for period {{selectedCondition.actualPeriod}}</p>
                         <div formArrayName="finalQuantity"
                             *ngFor="let value of countForm.get('finalQuantity').controls; let i = index">
 
@@ -141,7 +139,7 @@
                         </div>
                     </div>
                     <div class="col">
-                        <p>Seeded Quantity for period {{selectedCondition.lastPeriod+1}}</p>
+                        <p>Seeded Quantity for period {{selectedCondition.actualPeriod+1}}</p>
                         <div formArrayName="seededQuantity"
                             *ngFor="let value of countForm.get('seededQuantity').controls; let i = index">
                             <div class="input-group mb-3" [formGroupName]="i">
@@ -156,11 +154,12 @@
                 </div>
             </div>
             <div class="row d-flex justify-content-end mb-2">
-                <button type="submit" class="btn btn-primary float-right mt-3" *ngIf="selectedCondition.firstSeeding"
+                <button type="submit" class="btn btn-primary float-right mt-3" *ngIf="!selectedCondition.actualPeriod"
                     [disabled]="!firstCountForm.valid" (click)="submitFormFirstSeending()">
                     <i class="fas fa-cloud-download-alt"></i> Save
                 </button>
-                <button type="submit" class="btn btn-primary float-right mt-3" *ngIf="!selectedCondition.firstSeeding"
+                <button type="submit" class="btn btn-primary float-right mt-3" *ngIf="selectedCondition.actualPeriod && 
+                selectedCondition.actualPeriod > 0"
                     [disabled]="!countForm.valid" (click)="submitForm()">
                     <i class="fas fa-cloud-download-alt"></i> Save
                 </button>

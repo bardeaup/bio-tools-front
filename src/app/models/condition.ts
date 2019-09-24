@@ -1,4 +1,3 @@
-import { CellCount } from './cell-count';
 import { Treatment } from './treatment';
 
 
@@ -6,20 +5,16 @@ export class Condition {
     id: number;
     cellLine: string;
     isAdherentCell: boolean;
-    firstSeeding?: boolean;
-    lastPeriod?: number
+    actualPeriod?: number
     initialPopulationDoubling?: number;
-    cellCountList?: CellCount[];
     treatmentList?: Treatment[];
 
 
-    constructor(cellLine: string, isAdherentCell: boolean, firstSeeding: boolean,lastPeriod: number, cellCountList?: CellCount[],
+    constructor(cellLine: string, isAdherentCell: boolean, actualPeriod: number,
         treatmentList?: Treatment[], initialPopulationDoubling?: number) {
         this.cellLine = cellLine;
         this.isAdherentCell = isAdherentCell;
-        this.firstSeeding = firstSeeding;
-        this.lastPeriod = lastPeriod;
-        this.cellCountList = cellCountList;
+        this.actualPeriod = actualPeriod;
         this.treatmentList = treatmentList;
         this.initialPopulationDoubling = initialPopulationDoubling;
     }
