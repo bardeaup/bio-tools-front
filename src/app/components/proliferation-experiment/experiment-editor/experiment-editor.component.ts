@@ -24,16 +24,19 @@ export class ExperimentEditorComponent implements OnInit {
   selectedCondition: Condition;
   selectedView: string;
   graphAvailable: boolean = false;
+  countSaved: boolean = false;
+  countSavingFailed: boolean = false;
 
   constructor(private experimentService: ExperimentService,
     private formBuilder: FormBuilder,
     private router: Router) { }
 
   ngOnInit() {
+    this.countSaved = false;
+    this.countSavingFailed = false;
     this.experimentService.exp$.subscribe(
       experiment => {
         this.experiment = experiment;
-        console.log('exp : ', experiment);
       });
     if (this.experiment.detail === null) {
       this.router.navigate(['proliferation']);
@@ -41,6 +44,8 @@ export class ExperimentEditorComponent implements OnInit {
 
   }
   newCountSavingForm(conditionId: number) {
+    this.countSaved = false;
+    this.countSavingFailed = false;
     this.selectedView = 'COUNT_FORM';
 
     this.experiment.conditionList.forEach(function (condition) {
@@ -50,7 +55,6 @@ export class ExperimentEditorComponent implements OnInit {
 
         // Premier ensemmencement de cellules
         if (this.selectedCondition.actualPeriod === null) {
-          console.log('1', this.selectedCondition);
           this.countForm = null;
           this.firstCountForm = this.formBuilder.group({
             date: [moment([today.getFullYear(), today.getMonth(), today.getDate()]), Validators.required],
@@ -62,9 +66,7 @@ export class ExperimentEditorComponent implements OnInit {
           }
         } else { // Ensemmencement de cellules != du premier avec une quantité
           // comptée et ré-ensemencée
-          console.log('2+', this.selectedCondition);
           this.firstCountForm = null;
-
           this.countForm = this.formBuilder.group({
             date: [moment([today.getFullYear(), today.getMonth(), today.getDate()]), Validators.required],
             time: [{ hour: null, minute: null }, Validators.required],
@@ -76,7 +78,6 @@ export class ExperimentEditorComponent implements OnInit {
             this.seededQuantityArray.push(this.createQuantityValue(i + 1));
           }
         }
-        console.log("selectedCondition : ", this.selectedCondition)
       }
     }, this);
 
@@ -121,16 +122,11 @@ export class ExperimentEditorComponent implements OnInit {
     let firstCount: ConditionCellCount = new ConditionCellCount(this.selectedCondition.id, this.experiment.detail.conditionReplicat,
       cellCountList, null);
 
-    console.log('firstCount form : ', firstCount)
-
-
     this.experimentService.saveCellCountPerCondition(firstCount).subscribe(
       addedCount => {
         this.selectedCondition = null;
-        console.log('addedCount', addedCount);
         this.experimentService.loadUserExperimentById(this.experiment.id.toString()).subscribe(
           experiment => {
-            console.log("id", experiment);
             this.experimentService.updateExperiment(experiment);
           },
           (err) => {
@@ -139,6 +135,7 @@ export class ExperimentEditorComponent implements OnInit {
         )
       },
       (error) => {
+        this.countSavingFailed = true;
         console.log("error on saving first cell count", error);
       }
     );
@@ -147,7 +144,6 @@ export class ExperimentEditorComponent implements OnInit {
 
   submitForm() {
     let form = this.countForm.value;
-    console.log('form : ', form);
 
     // Final count :
     let finalCountDate = moment(form.date, 'YYYY-MM-DD')
@@ -175,10 +171,10 @@ export class ExperimentEditorComponent implements OnInit {
 
     this.experimentService.saveCellCountPerCondition(conditionCount).subscribe(
       addedCount => {
-        console.log('addedCount', addedCount);
+        this.selectedCondition = null;
+        this.countSaved = true;
         this.experimentService.loadUserExperimentById(this.experiment.id.toString()).subscribe(
           experiment => {
-            console.log("id", experiment);
             this.experimentService.updateExperiment(experiment);
           },
           (err) => {

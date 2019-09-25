@@ -39,6 +39,14 @@
             </div>
         </div>
 
+        <div class="col" *ngIf="countSaved || countSavingFailed">
+            <div *ngIf="countSaved" class="alert alert-success" role="alert">
+                <p>Count saved successfully</p>
+            </div>
+            <div *ngIf="countSavingFailed" class="alert alert-danger" role="alert">
+                Count saving failure
+            </div>
+        </div>
         <!-- Bloc de saisie de compte cellulaire -->
         <div class="col px-5 ml-2 white-bg rounded" *ngIf="selectedCondition">
             <div class="my-4">
