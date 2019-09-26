@@ -124,6 +124,7 @@ export class ExperimentEditorComponent implements OnInit {
 
     this.experimentService.saveCellCountPerCondition(firstCount).subscribe(
       addedCount => {
+        this.countSaved = true;
         this.selectedCondition = null;
         this.experimentService.loadUserExperimentById(this.experiment.id.toString()).subscribe(
           experiment => {
@@ -181,6 +182,9 @@ export class ExperimentEditorComponent implements OnInit {
             console.log('addedCount err', err);
           }
         )
+      },
+      (countSavingErr) => {
+        this.countSavingFailed = true;
       })
   }
 }
