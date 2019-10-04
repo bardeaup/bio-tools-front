@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-import { ConcentrationUnit } from 'src/app/models/concentration-unit';
-import { ConcentrationUnitService } from 'src/app/services/concentration-unit.service';
-import { ProliferationExperimentDetail } from 'src/app/models/proliferation-experiment-detail';
-import { Condition } from 'src/app/models/condition';
-import { CellularCountProject } from 'src/app/models/cellular-count-project';
-import { ExperimentService } from 'src/app/services/experiment.service';
-import { Treatment } from 'src/app/models/treatment';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ErrorCustom } from 'src/app/models/error-custom';
+import {Component, OnInit} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ConcentrationUnit} from 'src/app/models/concentration-unit';
+import {ProliferationExperimentDetail} from 'src/app/models/proliferation-experiment-detail';
+import {Condition} from 'src/app/models/condition';
+import {CellularCountProject} from 'src/app/models/cellular-count-project';
+import {Treatment} from 'src/app/models/treatment';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ErrorCustom} from 'src/app/models/error-custom';
+import {ExperimentService} from '../../../services/business/experiment/experiment.service';
+import {ConcentrationUnitService} from '../../../services/business/concentration-unit/concentration-unit.service';
 
 
 @Component({
@@ -23,16 +23,19 @@ export class ExperimentSetupComponent implements OnInit {
   private error: ErrorCustom = null;
 
   constructor(private formBuilder: FormBuilder,
-    private concentrationUnitService: ConcentrationUnitService,
-    private experimentService: ExperimentService,
-    private route: ActivatedRoute,
-    private router: Router) { }
+              private concentrationUnitService: ConcentrationUnitService,
+              private experimentService: ExperimentService,
+              private route: ActivatedRoute,
+              private router: Router) {
+  }
 
   ngOnInit() {
     this.initForm();
     this.concentrationUnitService.loadConcentrationUnitReferential().subscribe(
-      data => { this.concentrationUnitRef = data; }
-    )
+      data => {
+        this.concentrationUnitRef = data;
+      }
+    );
   }
 
 
@@ -68,12 +71,13 @@ export class ExperimentSetupComponent implements OnInit {
       name: [null, Validators.required],
       concentrationValue: [null, [Validators.min(0), Validators.max(900000000000000000), Validators.required]],
       concentrationUnit: [null, Validators.required]
-    })
+    });
   }
 
   get conditionList() {
     return this.form.get('conditionList') as FormArray;
   }
+
   /**
    * Ajout d'une condition à la liste
    */
@@ -96,10 +100,10 @@ export class ExperimentSetupComponent implements OnInit {
    */
   addTreatment(i: number) {
 
-    let j: number = 0;
-    for (let control of this.conditionList.controls) {
+    let j = 0;
+    for (const control of this.conditionList.controls) {
       if (i === j) {
-        let treatmentList: FormArray = control.get('treatmentList') as FormArray;
+        const treatmentList: FormArray = control.get('treatmentList') as FormArray;
         treatmentList.push(this.createTreatment());
       }
       j++;
@@ -111,10 +115,10 @@ export class ExperimentSetupComponent implements OnInit {
     // blocage de la redirection déclanchée par la balise <a>
     event.preventDefault();
 
-    let j: number = 0;
-    for (let control of this.conditionList.controls) {
+    let j = 0;
+    for (const control of this.conditionList.controls) {
       if (conditionListIndex === j) {
-        let treatmentList: FormArray = control.get('treatmentList') as FormArray;
+        const treatmentList: FormArray = control.get('treatmentList') as FormArray;
         treatmentList.removeAt(treatmentListIndex);
       }
       j++;
@@ -128,36 +132,37 @@ export class ExperimentSetupComponent implements OnInit {
     console.log('submit : ', this.form.value);
     const formValue = this.form.value;
 
-    let detail: ProliferationExperimentDetail = new ProliferationExperimentDetail(
+    const detail: ProliferationExperimentDetail = new ProliferationExperimentDetail(
       formValue.detail.cultureMedia, formValue.detail.growthFactor,
       formValue.detail.antibiotic, formValue.detail.dioxygenPercentage,
       formValue.detail.temperature, formValue.detail.conditionReplicat);
 
-    let conditionList: Condition[] = [];
+    const conditionList: Condition[] = [];
     formValue.conditionList.forEach(c => {
-      let treatmentList: Treatment[] = [];
+      const treatmentList: Treatment[] = [];
       if (c.treatmentList !== null) {
         c.treatmentList.forEach(t => {
           console.log('t : ', t);
           treatmentList.push(new Treatment(t.name, t.concentrationValue, t.concentrationUnit));
           console.log('traitements boucle : ', treatmentList);
-        })
+        });
       }
       console.log('traitements  : ', treatmentList);
-      conditionList.push(new Condition(c.cellLine, c.isAdherentCell === "ADHERENT",
-        null,treatmentList, c.initialPopulationDoubling));
+      conditionList.push(new Condition(c.cellLine, c.isAdherentCell === 'ADHERENT',
+        null, treatmentList, c.initialPopulationDoubling));
     });
 
-    let project: CellularCountProject = new CellularCountProject(formValue.projectName, detail, conditionList);
-    console.log("mapped project object : ", project);
+    const project: CellularCountProject = new CellularCountProject(formValue.projectName, detail, conditionList);
+    console.log('mapped project object : ', project);
 
     this.experimentService.saveCellCountExperiment(project).subscribe(
       data => {
-        this.router.navigate(['../edit'], { relativeTo: this.route });
+        console.log(data);
+        this.router.navigate(['../edit'], {relativeTo: this.route});
         this.experimentService.updateExperiment(data);
       },
       (err) => {
-        console.log(err.error)
+        console.log(err.error);
         this.error = new ErrorCustom(err.error.msg, err.error.severity);
         if (err.error.msg.indexOf('project') >= 0) {
           this.form.get('projectName').reset();
