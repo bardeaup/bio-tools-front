@@ -5,6 +5,7 @@ import {ExperimentMenuComponent} from './experiment-menu/experiment-menu.compone
 import {ExperimentSetupComponent} from './experiment-setup/experiment-setup.component';
 import {ExperimentEditorComponent} from './experiment-editor/experiment-editor.component';
 import {ExperimentHistoryComponent} from './experiment-history/experiment-history.component';
+import {ExperimentResolve} from './resolver/experiment.resolve';
 
 const proliferationRoutes: Routes = [
   {
@@ -22,7 +23,10 @@ const proliferationRoutes: Routes = [
       },
       {
         path: 'history',
-        component: ExperimentHistoryComponent
+        component: ExperimentHistoryComponent,
+        resolve: {
+          experiments: ExperimentResolve
+        }
       }
     ]
   }

@@ -24,6 +24,7 @@ import {ExperimentEditorComponent} from './experiment-editor/experiment-editor.c
 import {ProjectSummaryComponent} from './project-summary/project-summary.component';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {ExperimentHistoryComponent} from './experiment-history/experiment-history.component';
+import {ExperimentResolve} from './resolver/experiment.resolve';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,6 @@ import {ExperimentHistoryComponent} from './experiment-history/experiment-histor
     MatStepperModule, MatFormFieldModule, MatButtonModule, MatInputModule, MatRippleModule, MatDatepickerModule, MatNativeDateModule,
   ],
   providers: [{ provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-  { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }]
+  { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }, ExperimentResolve]
 })
 export class ProliferationExperimentModule { }
