@@ -1,0 +1,25 @@
+<div>
+  <table class="table table-striped table-hover table-light">
+    <thead>
+    <tr>
+      <th>Project name</th>
+      <th>Culture media</th>
+      <th>Growth Factor</th>
+      <th>Antibiotic</th>
+      <th>Dioxygen Percentage</th>
+      <th>Temperature</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let experiment of experiments">
+      <th>{{experiment.projectName}}</th>
+      <td>{{experiment.detail.cultureMedia}}</td>
+      <td>{{experiment.detail.growthFactor}}</td>
+      <td>{{experiment.detail.antibiotic}}</td>
+      <td>{{experiment.detail.dioxygenPercentage}}</td>
+      <td>{{experiment.detail.temperature}} </td>
+      <td><button (click)="navigateTo(experiment)" type="button" class="btn btn-outline-success">Go</button></td>
+    </tr>
+    </tbody>
+  </table>
+</div>

@@ -11,7 +11,7 @@ import {ExperimentService} from '../../../services/business/experiment/experimen
 })
 export class ExperimentMenuComponent {
 
-  setupDisplayed: boolean = false;
+  setupDisplayed = false;
   experimentName: string;
   experiment: CellularCountProject;
   error: ErrorCustom;
