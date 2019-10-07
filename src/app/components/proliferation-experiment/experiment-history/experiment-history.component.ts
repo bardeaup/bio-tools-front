@@ -11,7 +11,7 @@ import {ExperimentService} from '../../../services/business/experiment/experimen
 })
 export class ExperimentHistoryComponent implements OnInit, AfterViewInit {
 
-  experiments: CellularCountProject[];
+  experiments: CellularCountProject[] = [];
 
   constructor(private experimentService: ExperimentService, private route: ActivatedRoute, private router: Router) {
   }
