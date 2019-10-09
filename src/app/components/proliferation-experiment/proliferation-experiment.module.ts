@@ -25,6 +25,7 @@ import {ProjectSummaryComponent} from './project-summary/project-summary.compone
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {ExperimentHistoryComponent} from './experiment-history/experiment-history.component';
 import {ExperimentResolve} from './resolver/experiment.resolve';
+import {ExperimentChartComponent} from './experiment-chart/experiment-chart.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import {ExperimentResolve} from './resolver/experiment.resolve';
     CapitalizeFirstPipe,
     ExperimentEditorComponent,
     ProjectSummaryComponent,
-    ExperimentHistoryComponent
+    ExperimentHistoryComponent,
+    ExperimentChartComponent
   ],
   imports: [
     CommonModule,

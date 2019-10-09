@@ -24,7 +24,6 @@ export class ExperimentEditorComponent implements OnInit {
   countForm: FormGroup;
   selectedCondition: Condition;
   selectedView: string;
-  graphAvailable = false;
   countSaved = false;
   countSavingFailed = false;
 
@@ -106,7 +105,9 @@ export class ExperimentEditorComponent implements OnInit {
   }
 
   selectView(view: string) {
-    this.selectedView = view;
+    if (this.selectedCondition.cellCountList.length > 0) {
+      this.selectedView = view;
+    }
   }
 
 
