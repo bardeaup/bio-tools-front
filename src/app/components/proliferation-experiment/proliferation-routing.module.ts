@@ -12,6 +12,9 @@ const proliferationRoutes: Routes = [
     path: 'proliferation',
     component: ExperimentMenuComponent,
     canActivate: [AuthGuardService],
+    resolve: {
+      experiments : ExperimentResolve
+    },
     children: [
       {
         path: 'create',

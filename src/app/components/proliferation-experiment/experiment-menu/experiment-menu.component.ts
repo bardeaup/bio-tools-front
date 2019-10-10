@@ -1,40 +1,45 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CellularCountProject} from 'src/app/models/cellular-count-project';
-import {ErrorCustom} from 'src/app/models/error-custom';
 import {ExperimentService} from '../../../services/business/experiment/experiment.service';
+import {FormControl} from '@angular/forms';
+import {Observable} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
 
 @Component({
   selector: 'app-experiment-menu',
   templateUrl: './experiment-menu.component.html',
   styleUrls: ['./experiment-menu.component.css'],
 })
-export class ExperimentMenuComponent {
+export class ExperimentMenuComponent implements OnInit {
 
-  setupDisplayed = false;
-  experimentName: string;
-  experiment: CellularCountProject;
-  error: ErrorCustom;
+  experiments: CellularCountProject[] = [];
+  formControl = new FormControl();
 
+  filteredExperiments: Observable<CellularCountProject[]>;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private experimentService: ExperimentService) {
   }
 
-
-  findExperimentByName() {
-    if (this.experimentName) {
-      this.experimentService.getByName(this.experimentName).subscribe(
-        experiment => {
-          console.log('findExperimentByName', experiment);
-          this.experimentService.updateExperiment(experiment);
-          this.router.navigate(['edit'], {relativeTo: this.route});
-        },
-        (err) => this.error = err
+  ngOnInit(): void {
+    this.experiments = this.route.snapshot.data.experiments;
+    this.filteredExperiments = this.formControl.valueChanges
+      .pipe(
+        startWith(''),
+        map(experimentName => experimentName ? this._filter(experimentName) : this.experiments.slice())
       );
-    }
   }
 
+  private _filter(value: string): CellularCountProject[] {
+    const filterValue = value.toLowerCase();
+    return this.experiments.filter(experiments => experiments.projectName.toLowerCase().indexOf(filterValue) === 0);
+  }
+
+  openExperimentDetail(experiment: CellularCountProject) {
+    this.experimentService.updateExperiment(experiment);
+    this.router.navigate(['edit'], {relativeTo: this.route});
+  }
 
 }

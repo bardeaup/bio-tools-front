@@ -26,6 +26,7 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-mome
 import {ExperimentHistoryComponent} from './experiment-history/experiment-history.component';
 import {ExperimentResolve} from './resolver/experiment.resolve';
 import {ExperimentChartComponent} from './experiment-chart/experiment-chart.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [
@@ -45,9 +46,17 @@ import {ExperimentChartComponent} from './experiment-chart/experiment-chart.comp
     HttpClientModule,
     NgbModule,
     MatRadioModule,
-    MatStepperModule, MatFormFieldModule, MatButtonModule, MatInputModule, MatRippleModule, MatDatepickerModule, MatNativeDateModule,
+    MatStepperModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatInputModule,
+    MatRippleModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatAutocompleteModule
   ],
-  providers: [{ provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-  { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS }, ExperimentResolve]
+  providers: [{provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS}, ExperimentResolve]
 })
-export class ProliferationExperimentModule { }
+export class ProliferationExperimentModule {
+}
