@@ -17,15 +17,19 @@
         <ul class="nav flex-column bg-white mb-0">
             <li class="nav-item">
                 <div class="input-group my-3">
-                    <input type="text" class="form-control" placeholder="Experiment name" aria-label="Experiment name"
-                        [(ngModel)]="experimentName" (keyup.enter)="findExperimentByName()" aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-success" type="button" (click)="findExperimentByName()">Find</button>
-                    </div>
+                  <input type="search" class="form-control" placeholder="Experiment name" aria-label="Experiment name" matInput [formControl]="formControl" [matAutocomplete]="auto">
+                  <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2"><i class="fas fa-search"></i></span>
+                  </div>
+                  <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let experiment of filteredExperiments | async" [value]="experiment.projectName" (click)="openExperimentDetail(experiment)">
+                      {{experiment.projectName}}
+                    </mat-option>
+                  </mat-autocomplete>
                 </div>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link text-dark font-italic">
+                <a routerLink="history" class="nav-link text-dark font-italic">
                     <i class="fa fa-table mr-3 text-primary fa-fw"></i>
                     Experiment history
                 </a>
@@ -38,7 +42,7 @@
                 </a>
             </li>
 
-           
+
         </ul>
 
         <p class="text-gray font-weight-bold text-uppercase px-3 small py-4 mb-0">Charts</p>

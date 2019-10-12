@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { SignUpInfo } from 'src/app/auth/signup-info';
-import { AuthService } from 'src/app/auth/auth.service';
-import { AuthLoginInfo } from 'src/app/auth/login-info';
-import { TokenStorageService } from 'src/app/auth/token-storage.service';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {SignUpInfo} from 'src/app/auth/signup-info';
+import {AuthService} from 'src/app/auth/auth.service';
+import {AuthLoginInfo} from 'src/app/auth/login-info';
+import {TokenStorageService} from 'src/app/auth/token-storage.service';
 
 @Component({
   selector: 'app-register',
@@ -13,7 +13,7 @@ import { TokenStorageService } from 'src/app/auth/token-storage.service';
 })
 export class RegisterComponent implements OnInit {
 
-  passwordError: boolean = false;
+  passwordError = false;
   registerForm: FormGroup;
   signupInfo: SignUpInfo;
   isSignedUp = false;
@@ -21,11 +21,12 @@ export class RegisterComponent implements OnInit {
   errorMessage = '';
 
   constructor(private router: Router,
-    private formBuilder: FormBuilder,
-    private authService: AuthService,
-    private tokenStorage: TokenStorageService) { }
+              private formBuilder: FormBuilder,
+              private authService: AuthService,
+              private tokenStorage: TokenStorageService) {
+  }
 
-    
+
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
       username: ['', Validators.required],
@@ -35,7 +36,7 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  registerFormPasswordReinit(){
+  registerFormPasswordReinit() {
     this.registerForm.controls['password'].reset();
     this.registerForm.controls['passwordConfirmation'].reset();
   }
@@ -43,8 +44,8 @@ export class RegisterComponent implements OnInit {
   register() {
 
     console.log('register()', this.registerForm.value);
-    let form = this.registerForm.value;
-    if(form.password !== form.passwordConfirmation){
+    const form = this.registerForm.value;
+    if (form.password !== form.passwordConfirmation) {
       this.passwordError = true;
       this.registerFormPasswordReinit();
 
@@ -71,14 +72,15 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  login(){
-    let loginInfo = new AuthLoginInfo(
+  login() {
+    const loginInfo = new AuthLoginInfo(
       this.signupInfo.username,
       this.signupInfo.password);
-  
+
     this.authService.attemptAuth(loginInfo).subscribe(
       data => {
         this.tokenStorage.saveToken(data.accessToken);
+        this.tokenStorage.saveRefreshToken(data.refreshToken);
         this.tokenStorage.saveUsername(data.username);
         this.tokenStorage.saveAuthorities(data.authorities);
         this.router.navigate(['proliferation']);

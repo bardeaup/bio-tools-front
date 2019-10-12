@@ -1,180 +1,180 @@
 <div>
-    <h1 class="text-gray font-weight-bold title_block mb-3">{{experiment.projectName | capitalizeFirst}} experiment</h1>
-    <div class="row m-0">
-        <div class="col-5 px-5 py-4 mr-2 white-bg rounded">
-            <h3 class="text-gray font-weight-bold pb-3">Summary</h3>
-            <div *ngIf="experiment.detail" class="row">
-                <div class="col">
-                    <p>
-                        <span class="card-subtitle mb-1 text-muted">Culture media : </span>
-                        {{experiment.detail.cultureMedia}}
-                    </p>
-                    <p>
-                        <span class="card-subtitle mb-1 text-muted">Antibiotic : </span>
-                        {{experiment.detail.antibiotic}}
-                    </p>
-                    <p>
-                        <span class="card-subtitle mb-1 text-muted">Dioxygen : </span>
-                        {{experiment.detail.dioxygenPercentage}}%
-                    </p>
-                </div>
-                <div class="col">
-                    <p>
-                        <span class="card-subtitle mb-1 text-muted">Growth factor : </span>
-                        {{experiment.detail.growthFactor}}
-                    </p>
-                    <p>
-                        <span class="card-subtitle mb-1 text-muted">Temperature : </span>
-                        {{experiment.detail.temperature}}°C
-                    </p>
-                </div>
-            </div>
-            <hr class="mb-4">
-            <div class="m-0 mt-3 white-bg rounded">
-
-                <h3 class="text-gray font-weight-bold pb-3">Conditions</h3>
-                <app-project-summary [experiment]="experiment" (newCountEvent)="newCountSavingForm($event)">
-                </app-project-summary>
-
-            </div>
+  <h1 class="text-gray font-weight-bold title_block mb-3">{{experiment.projectName | capitalizeFirst}} experiment</h1>
+  <div class="row m-0">
+    <div class="col-5 px-5 py-4 mr-2 white-bg rounded">
+      <h3 class="text-gray font-weight-bold pb-3">Summary</h3>
+      <div *ngIf="experiment.detail" class="row">
+        <div class="col">
+          <p>
+            <span class="card-subtitle mb-1 text-muted">Culture media : </span>
+            {{experiment.detail.cultureMedia}}
+          </p>
+          <p>
+            <span class="card-subtitle mb-1 text-muted">Antibiotic : </span>
+            {{experiment.detail.antibiotic}}
+          </p>
+          <p>
+            <span class="card-subtitle mb-1 text-muted">Dioxygen : </span>
+            {{experiment.detail.dioxygenPercentage}}%
+          </p>
         </div>
-
-        <div class="col" *ngIf="countSaved || countSavingFailed">
-            <div *ngIf="countSaved" class="alert alert-success" role="alert">
-                <p>Count saved successfully</p>
-            </div>
-            <div *ngIf="countSavingFailed" class="alert alert-danger" role="alert">
-                Count saving failure
-            </div>
+        <div class="col">
+          <p>
+            <span class="card-subtitle mb-1 text-muted">Growth factor : </span>
+            {{experiment.detail.growthFactor}}
+          </p>
+          <p>
+            <span class="card-subtitle mb-1 text-muted">Temperature : </span>
+            {{experiment.detail.temperature}}°C
+          </p>
         </div>
-        <!-- Bloc de saisie de compte cellulaire -->
-        <div class="col px-5 ml-2 white-bg rounded" *ngIf="selectedCondition">
-            <div class="my-4">
-                <div class="btn-group row justify-content-center">
-                    <button type="button" class="btn btn-outline-secondary"
-                        [ngClass]="{'active': selectedView === 'COUNT_FORM'}" (click)="selectView('COUNT_FORM')">Count
-                        form
-                    </button>
-                    <button type="button" class="btn btn-outline-secondary"
-                        [ngClass]="{'active': selectedView === 'GRAPH', 'disabled': !graphAvailable}">Graph<span
-                            *ngIf="graphAvailable" (click)="selectView('GRAPH')"> </span>
-                    </button>
-                </div>
-            </div>
-            <div *ngIf="selectedCondition" class="mb-3" class="row">
-                <div class="col">
-                    <strong>Cells : </strong> {{selectedCondition.cellLine}}
-                </div>
-                <div class="col" *ngIf="selectedCondition.treatmentList !== 0">
-                    <strong *ngIf="selectedCondition.treatmentList.length > 1">Treatments
-                        : </strong>
-                    <strong *ngIf="selectedCondition.treatmentList.length === 1">Treatment
-                        : </strong>
-                    <ul>
-                        <li *ngFor="let t of selectedCondition.treatmentList">
-                            {{t.name}}&nbsp;:&nbsp;{{t.concentrationValue}}
-                            &nbsp;{{t.concentrationUnitLabel}}</li>
-                    </ul>
-                </div>
-            </div>
-            <hr class="mb-4">
+      </div>
+      <hr class="mb-4">
+      <div class="m-0 mt-3 white-bg rounded">
 
-            <!-- Formulaires saisie compte cellulaire -->
+        <h3 class="text-gray font-weight-bold pb-3">Conditions</h3>
+        <app-project-summary [experiment]="experiment" (newCountEvent)="newCountSavingForm($event)">
+        </app-project-summary>
 
-            <!-- 1er compte de cellules - 1er ensemencement -->
-            <div [formGroup]="firstCountForm" class="row" 
-                *ngIf="!selectedCondition.actualPeriod || selectedCondition.actualPeriod === 0">
-
-                <div class="col w-50">
-                    <h3 class="text-gray font-weight-bold mt-2 pb-2">First seeding</h3>
-                    <div class="form-group pb-2">
-                        <ngb-timepicker formControlName="time" [meridian]=true></ngb-timepicker>
-                    </div>
-                    <mat-form-field>
-                        <input matInput [matDatepicker]="picker" placeholder="Choose a date (MM/dd/YYYY)"
-                            formControlName="date">
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
-                    </mat-form-field>
-                </div>
-                <div class="col">
-                    <h3 class="text-gray font-weight-bold mt-2 pb-5">Count list</h3>
-                    <div formArrayName="quantity"
-                        *ngFor="let value of firstCountForm.get('quantity').controls; let i = index">
-                        <div class="input-group mb-3" [formGroupName]="i">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroup-sizing-default">{{i+1}}</span>
-                            </div>
-                            <input type="text" class="form-control" aria-label="Sizing example input"
-                                aria-describedby="inputGroup-sizing-default" formControlName="value">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Formulaire complet -->
-            <div *ngIf="selectedCondition.actualPeriod >= 1" [formGroup]="countForm" class="row">
-                <h3 class="text-gray font-weight-bold mt-2 pb-2 w-100">Counting day</h3>
-                <div class="row w-100 d-flex align-items-center">
-                    <div class="col">
-                        <div class="form-group pb-2">
-                            <ngb-timepicker formControlName="time" [meridian]=true></ngb-timepicker>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <mat-form-field>
-                            <input matInput [matDatepicker]="picker" placeholder="Choose a date (MM/dd/YYYY)"
-                                formControlName="date">
-                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
-                        </mat-form-field>
-
-                    </div>
-                </div>
-                <div class="row w-100">
-                    <div class="col">
-                        <p>Final Quantity for period {{selectedCondition.actualPeriod}}</p>
-                        <div formArrayName="finalQuantity"
-                            *ngFor="let value of countForm.get('finalQuantity').controls; let i = index">
-
-                            <div class="input-group mb-3" [formGroupName]="i">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="inputGroup-sizing-default">{{i+1}}</span>
-                                </div>
-                                <input type="text" class="form-control" aria-label="Sizing example input"
-                                    aria-describedby="inputGroup-sizing-default" formControlName="value">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <p>Seeded Quantity for period {{selectedCondition.actualPeriod+1}}</p>
-                        <div formArrayName="seededQuantity"
-                            *ngFor="let value of countForm.get('seededQuantity').controls; let i = index">
-                            <div class="input-group mb-3" [formGroupName]="i">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="inputGroup-sizing-default">{{i+1}}</span>
-                                </div>
-                                <input type="text" class="form-control" aria-label="Sizing example input"
-                                    aria-describedby="inputGroup-sizing-default" formControlName="value">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row d-flex justify-content-end mb-2">
-                <button type="submit" class="btn btn-primary float-right mt-3" *ngIf="!selectedCondition.actualPeriod"
-                    [disabled]="!firstCountForm.valid" (click)="submitFormFirstSeending()">
-                    <i class="fas fa-cloud-download-alt"></i> Save
-                </button>
-                <button type="submit" class="btn btn-primary float-right mt-3" *ngIf="selectedCondition.actualPeriod && 
-                selectedCondition.actualPeriod > 0"
-                    [disabled]="!countForm.valid" (click)="submitForm()">
-                    <i class="fas fa-cloud-download-alt"></i> Save
-                </button>
-            </div>
-
-            <div id="graph"></div>
-        </div>
+      </div>
     </div>
+
+    <div class="col" *ngIf="countSaved || countSavingFailed">
+      <div *ngIf="countSaved" class="alert alert-success" role="alert">
+        <p>Count saved successfully</p>
+      </div>
+      <div *ngIf="countSavingFailed" class="alert alert-danger" role="alert">
+        Count saving failure
+      </div>
+    </div>
+    <!-- Bloc de saisie de compte cellulaire -->
+    <div class="col px-5 ml-2 white-bg rounded" *ngIf="selectedCondition">
+      <div class="my-4">
+        <div class="btn-group row justify-content-center">
+          <button type="button" class="btn btn-outline-secondary"
+                  [ngClass]="{'active': selectedView === 'COUNT_FORM'}" (click)="selectView('COUNT_FORM')">Count
+            form
+          </button>
+          <button type="button" class="btn btn-outline-secondary" [ngClass]="{'active': selectedView === 'GRAPH'}"
+                  (click)="selectView('GRAPH')">Graph
+          </button>
+        </div>
+      </div>
+      <div *ngIf="selectedCondition && selectedView === 'COUNT_FORM'" class="row mb-3">
+        <div class="col">
+          <strong>Cells : </strong> {{selectedCondition.cellLine}}
+        </div>
+        <div class="col" *ngIf="selectedCondition.treatmentList.length !== 0">
+          <strong *ngIf="selectedCondition.treatmentList.length > 1">Treatments
+            : </strong>
+          <strong *ngIf="selectedCondition.treatmentList.length === 1">Treatment
+            : </strong>
+          <ul>
+            <li *ngFor="let t of selectedCondition.treatmentList">
+              {{t.name}}&nbsp;:&nbsp;{{t.concentrationValue}}
+              &nbsp;{{t.concentrationUnitLabel}}</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="mb-4">
+
+      <!-- Formulaires saisie compte cellulaire -->
+
+      <!-- 1er compte de cellules - 1er ensemencement -->
+      <div [formGroup]="firstCountForm" class="row"
+           *ngIf="!selectedCondition.actualPeriod || selectedCondition.actualPeriod === 0">
+
+        <div class="col w-50">
+          <h3 class="text-gray font-weight-bold mt-2 pb-2">First seeding</h3>
+          <div class="form-group pb-2">
+            <ngb-timepicker formControlName="time" [meridian]=true></ngb-timepicker>
+          </div>
+          <mat-form-field>
+            <input matInput [matDatepicker]="picker" placeholder="Choose a date (MM/dd/YYYY)"
+                   formControlName="date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <h3 class="text-gray font-weight-bold mt-2 pb-5">Count list</h3>
+          <div formArrayName="quantity"
+               *ngFor="let value of firstCountForm.get('quantity').controls; let i = index">
+            <div class="input-group mb-3" [formGroupName]="i">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default">{{i + 1}}</span>
+              </div>
+              <input type="text" class="form-control" aria-label="Sizing example input"
+                     aria-describedby="inputGroup-sizing-default" formControlName="value">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulaire complet -->
+      <div *ngIf="selectedCondition.actualPeriod >= 1 && selectedView === 'COUNT_FORM'" [formGroup]="countForm"
+           class="row">
+        <h3 class="text-gray font-weight-bold mt-2 pb-2 w-100">Counting day</h3>
+        <div class="row w-100 d-flex align-items-center">
+          <div class="col">
+            <div class="form-group pb-2">
+              <ngb-timepicker formControlName="time" [meridian]=true></ngb-timepicker>
+            </div>
+          </div>
+          <div class="col">
+            <mat-form-field>
+              <input matInput [matDatepicker]="picker" placeholder="Choose a date (MM/dd/YYYY)"
+                     formControlName="date">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+          </div>
+        </div>
+        <div class="row w-100">
+          <div class="col">
+            <p>Final Quantity for period {{selectedCondition.actualPeriod}}</p>
+            <div formArrayName="finalQuantity"
+                 *ngFor="let value of countForm.get('finalQuantity').controls; let i = index">
+
+              <div class="input-group mb-3" [formGroupName]="i">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroup-sizing-default">{{i + 1}}</span>
+                </div>
+                <input type="text" class="form-control" aria-label="Sizing example input"
+                       aria-describedby="inputGroup-sizing-default" formControlName="value">
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <p>Seeded Quantity for period {{selectedCondition.actualPeriod + 1}}</p>
+            <div formArrayName="seededQuantity"
+                 *ngFor="let value of countForm.get('seededQuantity').controls; let i = index">
+              <div class="input-group mb-3" [formGroupName]="i">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroup-sizing-default">{{i + 1}}</span>
+                </div>
+                <input type="text" class="form-control" aria-label="Sizing example input"
+                       aria-describedby="inputGroup-sizing-default" formControlName="value">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row d-flex justify-content-end mb-2">
+          <button type="submit" class="btn btn-primary float-right mt-3" *ngIf="!selectedCondition.actualPeriod"
+                  [disabled]="!firstCountForm.valid" (click)="submitFormFirstSeending()">
+            <i class="fas fa-cloud-download-alt"></i> Save
+          </button>
+          <button type="submit" class="btn btn-primary float-right mt-3" *ngIf="selectedCondition.actualPeriod &&
+                selectedCondition.actualPeriod > 0"
+                  [disabled]="!countForm.valid" (click)="submitForm()">
+            <i class="fas fa-cloud-download-alt"></i> Save
+          </button>
+        </div>
+      </div>
+
+      <app-experiment-chart [condition]="this.selectedCondition" *ngIf="selectedView === 'GRAPH'"></app-experiment-chart>
+    </div>
+  </div>
 
 </div>

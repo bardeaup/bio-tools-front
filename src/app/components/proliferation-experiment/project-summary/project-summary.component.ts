@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { ExperimentService } from 'src/app/services/experiment.service';
-import { CellularCountProject } from 'src/app/models/cellular-count-project';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {CellularCountProject} from 'src/app/models/cellular-count-project';
 
 @Component({
   selector: 'app-project-summary',
@@ -9,14 +8,14 @@ import { CellularCountProject } from 'src/app/models/cellular-count-project';
 })
 export class ProjectSummaryComponent implements OnInit {
 
-  constructor(private experimentService: ExperimentService) { }
+  constructor() { }
 
   @Input() experiment: CellularCountProject;
   @Output() newCountEvent = new EventEmitter<number>();
-  
+
 
   ngOnInit() {}
-  
+
   /* *
    * Inform Proliferation parent Component to add a new count to the condition.
    */
