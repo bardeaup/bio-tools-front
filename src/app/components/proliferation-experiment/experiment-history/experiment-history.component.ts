@@ -17,7 +17,9 @@ export class ExperimentHistoryComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.experiments = this.route.snapshot.data.experiments;
+    if (this.route.snapshot.data.experiments) {
+      this.experiments = this.route.snapshot.data.experiments;
+    }
   }
 
   navigateTo(experiment: CellularCountProject) {

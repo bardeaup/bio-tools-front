@@ -24,7 +24,9 @@ export class ExperimentMenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.experiments = this.route.snapshot.data.experiments;
+    if (this.route.snapshot.data.experiments) {
+      this.experiments = this.route.snapshot.data.experiments;
+    }
     this.filteredExperiments = this.formControl.valueChanges
       .pipe(
         startWith(''),
