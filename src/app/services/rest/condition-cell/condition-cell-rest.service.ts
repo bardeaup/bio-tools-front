@@ -9,7 +9,7 @@ import {Crud} from '../../interface/crud';
 })
 export class ConditionCellRestService implements Crud<ConditionCellCount> {
 
-  private conditionCellUrl = 'http://localhost:8080/api/proliferation-experiment';
+  private conditionCellUrl = 'http://localhost:8080/api/cellular-count-condition';
 
   constructor(private http: HttpClient) {
   }
@@ -27,7 +27,7 @@ export class ConditionCellRestService implements Crud<ConditionCellCount> {
   }
 
   save(element: ConditionCellCount): Observable<ConditionCellCount> {
-    return this.http.post<ConditionCellCount>(this.conditionCellUrl + '/count', element);
+    return this.http.post<ConditionCellCount>(this.conditionCellUrl, element);
   }
 
   update(element: ConditionCellCount) {

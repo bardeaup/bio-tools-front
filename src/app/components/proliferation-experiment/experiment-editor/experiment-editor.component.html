@@ -160,17 +160,17 @@
             </div>
           </div>
         </div>
-        <div class="row d-flex justify-content-end mb-2">
-          <button type="submit" class="btn btn-primary float-right mt-3" *ngIf="!selectedCondition.actualPeriod"
-                  [disabled]="!firstCountForm.valid" (click)="submitFormFirstSeending()">
-            <i class="fas fa-cloud-download-alt"></i> Save
-          </button>
-          <button type="submit" class="btn btn-primary float-right mt-3" *ngIf="selectedCondition.actualPeriod &&
+      </div>
+      <div class="row d-flex justify-content-end mb-2">
+        <button type="submit" class="btn btn-primary float-right mt-3" *ngIf="!selectedCondition.actualPeriod"
+                [disabled]="!firstCountForm.valid" (click)="submitFormFirstSeending()">
+          <i class="fas fa-cloud-download-alt"></i> Save
+        </button>
+        <button type="submit" class="btn btn-primary float-right mt-3" *ngIf="selectedCondition.actualPeriod &&
                 selectedCondition.actualPeriod > 0"
-                  [disabled]="!countForm.valid" (click)="submitForm()">
-            <i class="fas fa-cloud-download-alt"></i> Save
-          </button>
-        </div>
+                [disabled]="!countForm.valid" (click)="submitForm()">
+          <i class="fas fa-cloud-download-alt"></i> Save
+        </button>
       </div>
 
       <app-experiment-chart [condition]="this.selectedCondition" *ngIf="selectedView === 'GRAPH'"></app-experiment-chart>
