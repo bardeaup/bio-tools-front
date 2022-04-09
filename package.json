@@ -28,7 +28,7 @@
     "font-awesome": "^4.7.0",
     "jquery": "^3.4.1",
     "lodash.update": "^4.10.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "popper.js": "^1.15.0",
     "rxjs": "~6.4.0",
     "tslib": "^1.9.0",
